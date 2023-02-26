@@ -4,23 +4,23 @@ import morgan from "morgan";
 
 import { API_PORT } from "./consts";
 
+import routesDrivers from "./routes/drivers";
+import routesConsturctors from "./routes/constructors";
+import routesPitStop from "./routes/pitstops";
+import routesLaps from "./routes/laps";
+import routesStandingConstructors from "./routes/standingsConstructors";
+import routesStandingDrivers from "./routes/standingsDrivers";
+import routesRaceSchedule from "./routes/raceSchedule";
+import routesStatus from "./routes/status";
+import routesCircuit from "./routes/circuits";
+import routesSeason from "./routes/season";
+import routesQualifying from "./routes/qualifying";
+import routesRaceResults from "./routes/raceResults";
+import routesSprintResults from "./routes/sprintResults";
+
 const app = express();
 app.use(morgan("dev"));
 app.use(cors()); //TODO: make this configurable to limit access to known consumers?
-
-const routesDrivers = require("./routes/drivers.js");
-const routesConsturctors = require("./routes/constructors.js");
-const routesPitStop = require("./routes/pitstops.js");
-const routesLaps = require("./routes/laps.js");
-const routesStandingConstructors = require("./routes/standingsConstructors.js");
-const routesStandingDrivers = require("./routes/standingsDrivers.js");
-const routesRaceSchedule = require("./routes/raceSchedule.js");
-const routesStatus = require("./routes/status.js");
-const routesCircuit = require("./routes/circuits.js");
-const routesSeason = require("./routes/season.js");
-const routesQualifying = require("./routes/qualifying.js");
-const routesRaceResults = require("./routes/raceResults.js");
-const routesSprintResults = require("./routes/sprintResults.js");
 
 //add Filters
 app.use("/drivers", routesDrivers); //DONE

@@ -173,4 +173,4 @@ router.get("", (req, res) => {
         res.json(json);
     });
 });
-module.exports = router;
+export default router;
