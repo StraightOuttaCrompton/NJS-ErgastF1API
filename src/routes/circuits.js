@@ -1,11 +1,7 @@
 import { DEFAULT_LIMIT } from "../consts";
 import { getMySQLConnection } from "../connection";
-import express from "express";
 import path from "path";
 
-const router = express.Router();
-
-//Supported Function
 function formattedCircuits(row) {
     const circuits = row.map((row) => {
         return {
@@ -24,8 +20,7 @@ function formattedCircuits(row) {
     return circuits;
 }
 
-// /drivers
-router.get("", (req, res) => {
+export function getCircuits(req, res) {
     const offset = typeof req.query.offset != "undefined" ? parseInt(req.query.offset) : 0;
     const limit = typeof req.query.limit != "undefined" ? parseInt(req.query.limit) : DEFAULT_LIMIT;
 
@@ -150,5 +145,4 @@ router.get("", (req, res) => {
         json.MRData.CircuitTable.Circuits = formattedCircuits(rows);
         res.json(json);
     });
-});
-export default router;
+}

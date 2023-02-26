@@ -4,7 +4,7 @@
     "description": "Switching from PHP to nodeJS, of the ergast.com API services",
     "main": "src/app.js",
     "scripts": {
-        "start": "nodemon src/app.ts",
+        "start": "nodemon src/index.ts",
         "prepare": "husky install",
         "format-files": "prettier --write .",
         "test": "jest"
