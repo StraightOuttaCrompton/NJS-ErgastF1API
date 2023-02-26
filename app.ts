@@ -1,11 +1,11 @@
 import express from "express";
-const app = express();
-const cors = require("cors");
+import cors from "cors";
+import morgan from "morgan";
 
-const morgan = require("morgan");
-app.use(morgan("dev"));
 const PORT = 8732;
 
+const app = express();
+app.use(morgan("dev"));
 app.use(cors()); //TODO: make this configurable to limit access to known consumers?
 
 const routesDrivers = require("./routes/drivers.js");
@@ -40,7 +40,7 @@ app.use("/results/sprint", routesSprintResults); //DONE
 //TODO: add last and next params
 
 app.get("", (req, res) => {
-    res.status(200).send("Hi!as asd");
+    res.status(200).send("Hi!");
 });
 
 app.use(function (req, res, next) {
