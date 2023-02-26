@@ -2,7 +2,7 @@ import mysql from "mysql";
 
 const pool = mysql.createPool({
     connectionLimit: 20,
-    host: "mysql-server",
+    host: process.env.NODE_ENV === "production" ? "mysql-server" : "localhost",
     port: 3306,
     user: "root",
     password: "f1",
@@ -12,4 +12,3 @@ const pool = mysql.createPool({
 export function getMySQLConnection() {
     return pool;
 }
-
