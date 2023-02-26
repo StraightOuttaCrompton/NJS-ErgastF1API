@@ -1,8 +1,9 @@
 import { DEFAULT_LIMIT } from "../consts";
 import { getMySQLConnection } from "../connection";
-const express = require("express");
+import express from "express";
+import path from "path";
+
 const router = express.Router();
-const path = require("path");
 
 //Supported Function
 function formattedCircuits(row) {
@@ -25,8 +26,8 @@ function formattedCircuits(row) {
 
 // /drivers
 router.get("", (req, res) => {
-    let offset = typeof req.query.offset != "undefined" ? parseInt(req.query.offset) : 0;
-    let limit = typeof req.query.limit != "undefined" ? parseInt(req.query.limit) : DEFAULT_LIMIT;
+    const offset = typeof req.query.offset != "undefined" ? parseInt(req.query.offset) : 0;
+    const limit = typeof req.query.limit != "undefined" ? parseInt(req.query.limit) : DEFAULT_LIMIT;
 
     //START
     let year = null;
@@ -128,7 +129,7 @@ router.get("", (req, res) => {
             return;
         }
 
-        let json = {
+        const json = {
             MRData: {
                 limit: limit.toString(),
                 offset: offset.toString(),

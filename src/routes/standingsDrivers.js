@@ -1,9 +1,11 @@
 import { DEFAULT_LIMIT } from "../consts";
 import { getMySQLConnection } from "../connection";
 
-const express = require("express");
+import express from "express";
+import path from "path";
+
 const router = express.Router();
-const path = require("path");
+router;
 
 //Supported Function
 
@@ -36,7 +38,7 @@ function heading(row) {
 
 function formattedStandings(rows) {
     let currentYear = 0;
-    let DriverStandings = [];
+    const DriverStandings = [];
 
     rows.forEach((row) => {
         if (row.year != currentYear) {
@@ -51,11 +53,11 @@ function formattedStandings(rows) {
 }
 
 function getConstructors(year, round, driverId, callback) {
-    let sql = `SELECT DISTINCT c.constructorRef, c.name, c.nationality, c.url 
+    const sql = `SELECT DISTINCT c.constructorRef, c.name, c.nationality, c.url 
                 FROM constructors c, results re, races ra, drivers d
                 WHERE re.raceId=ra.raceId  AND c.constructorId=re.constructorId AND ra.year=${year} AND ra.round<=${round} AND re.driverId=d.driverId AND d.driverRef='${driverId}';`;
     const conn = getMySQLConnection();
-    let constructors = [];
+    const constructors = [];
     conn.query(sql, (err, rows, fields) => {
         if (err) {
             console.log("Failed to query for " + __filename.slice(__filename.lastIndexOf(path.sep) + 1) + ": " + err);
@@ -75,8 +77,8 @@ function getConstructors(year, round, driverId, callback) {
 }
 
 router.get("", (req, res) => {
-    let offset = typeof req.query.offset != "undefined" ? parseInt(req.query.offset) : 0;
-    let limit = typeof req.query.limit != "undefined" ? parseInt(req.query.limit) : DEFAULT_LIMIT;
+    const offset = typeof req.query.offset != "undefined" ? parseInt(req.query.offset) : 0;
+    const limit = typeof req.query.limit != "undefined" ? parseInt(req.query.limit) : DEFAULT_LIMIT;
 
     //START
     let year = null;
@@ -174,7 +176,7 @@ router.get("", (req, res) => {
             return;
         }
 
-        let json = {
+        const json = {
             MRData: {
                 limit: limit.toString(),
                 offset: offset.toString(),
