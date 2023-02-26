@@ -13,6 +13,3 @@ export function getMySQLConnection() {
     return pool;
 }
 
-export function defaultLimit() {
-    return 30;
-}

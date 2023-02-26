@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 
-import { API_PORT } from "consts";
+import { API_PORT } from "./consts";
 
 const app = express();
 app.use(morgan("dev"));

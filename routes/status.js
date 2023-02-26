@@ -1,8 +1,10 @@
+import { DEFAULT_LIMIT } from "../consts";
+import {getMySQLConnection} from "../connection";
+
 const express = require("express");
 const router = express.Router();
 const path = require("path");
 
-let MySQLConfiguration = require("../connection.js");
 
 //Supported Function
 function formattedStatus(row)
@@ -20,7 +22,7 @@ function formattedStatus(row)
 router.get("", (req,res) => {
 
     let offset = (typeof req.query.offset != 'undefined') ? parseInt(req.query.offset) : 0;
-    let limit = (typeof req.query.limit != 'undefined') ? parseInt(req.query.limit) : MySQLConfiguration.defaultLimit();
+    let limit = (typeof req.query.limit != 'undefined') ? parseInt(req.query.limit) : DEFAULT_LIMIT;
 
     //START
     let year = null;
@@ -85,7 +87,7 @@ router.get("", (req,res) => {
 
     sql += ` GROUP BY status.statusId ORDER BY status.statusId LIMIT ${offset}, ${limit}`;
     
-    const conn = MySQLConfiguration.getMySQLConnection();
+    const conn = getMySQLConnection();
     conn.query(sql,(err,rows,fields) => {
         if(err){
             console.log("Failed to query for " + __filename.slice(__filename.lastIndexOf(path.sep)+1) + ": "+ err);
