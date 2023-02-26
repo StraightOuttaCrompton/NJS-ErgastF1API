@@ -1,4 +1,4 @@
-import { DEFAULT_LIMIT } from "../consts";
+import { DEFAULT_LIMIT, DEFAULT_OFFSET } from "../consts";
 import { getMySQLConnection } from "../connection";
 import path from "path";
 
@@ -21,7 +21,7 @@ function formattedCircuits(row) {
 }
 
 export function getCircuits(req, res) {
-    const offset = typeof req.query.offset != "undefined" ? parseInt(req.query.offset) : 0;
+    const offset = typeof req.query.offset != "undefined" ? parseInt(req.query.offset) : DEFAULT_OFFSET;
     const limit = typeof req.query.limit != "undefined" ? parseInt(req.query.limit) : DEFAULT_LIMIT;
 
     //START
