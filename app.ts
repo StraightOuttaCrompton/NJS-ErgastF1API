@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 
-const PORT = 8732;
+import { API_PORT } from "consts";
 
 const app = express();
 app.use(morgan("dev"));
@@ -47,6 +47,6 @@ app.use(function (req, res, next) {
     res.status(404).send("<h3>Bad Request</h3>");
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
+app.listen(API_PORT, () => {
+    console.log(`Server is listening on port ${API_PORT}`);
 });
