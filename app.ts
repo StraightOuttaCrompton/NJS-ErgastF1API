@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 const app = express();
 const cors = require("cors");
 
@@ -23,31 +23,30 @@ const routesRaceResults = require("./routes/raceResults.js");
 const routesSprintResults = require("./routes/sprintResults.js");
 
 //add Filters
-app.use("/drivers", routesDrivers);//DONE
-app.use("/constructors", routesConsturctors);//DONE
-app.use("/pitstops", routesPitStop);//DONE
-app.use("/laps", routesLaps);//DONE
-app.use("/standings/constructors", routesStandingConstructors);//DONE
-app.use("/standings/drivers",routesStandingDrivers);//DONE BUT THE PART OF CONSTRUCTORS IS MISSING
-app.use("/races",routesRaceSchedule);//DONE
-app.use("/status",routesStatus);//DONE
-app.use("/circuits", routesCircuit);//DONE
-app.use("/seasons",routesSeason);//DONE
-app.use("/qualifying",routesQualifying);//DONE
-app.use("/results",routesRaceResults);//DONE
-app.use("/results/sprint", routesSprintResults);//DONE
+app.use("/drivers", routesDrivers); //DONE
+app.use("/constructors", routesConsturctors); //DONE
+app.use("/pitstops", routesPitStop); //DONE
+app.use("/laps", routesLaps); //DONE
+app.use("/standings/constructors", routesStandingConstructors); //DONE
+app.use("/standings/drivers", routesStandingDrivers); //DONE BUT THE PART OF CONSTRUCTORS IS MISSING
+app.use("/races", routesRaceSchedule); //DONE
+app.use("/status", routesStatus); //DONE
+app.use("/circuits", routesCircuit); //DONE
+app.use("/seasons", routesSeason); //DONE
+app.use("/qualifying", routesQualifying); //DONE
+app.use("/results", routesRaceResults); //DONE
+app.use("/results/sprint", routesSprintResults); //DONE
 
 //TODO: add last and next params
 
-
-app.get("", (req,res) => {
-    res.status(200).send("Hi!");
+app.get("", (req, res) => {
+    res.status(200).send("Hi!as asd");
 });
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.status(404).send("<h3>Bad Request</h3>");
 });
 
-app.listen(PORT,() => {
+app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
