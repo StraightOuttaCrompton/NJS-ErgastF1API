@@ -2,9 +2,9 @@
   "name": "njs-f1-api",
   "version": "1.0.0",
   "description": "Switching from PHP to nodeJS, of the ergast.com API services",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "nodemon app.ts"
+    "start": "nodemon src/app.ts"
   },
   "author": "Davide Albiero",
   "license": "ISC",
