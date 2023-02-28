@@ -65,26 +65,7 @@ function parseParamAsString<T = string | undefined>(param: Request["query"][keyo
     return param;
 }
 
-interface CircuitResponse {
-    MRData: {
-        limit: string;
-        offset: string;
-        CircuitTable: {
-            circuitId?: string;
-            driverId?: string;
-            constructorId?: string;
-            grid?: string;
-            result?: string;
-            fastest?: string;
-            status?: string;
-            season?: string;
-            round?: string;
-            Circuits: Circuit[];
-        };
-    };
-}
-
-export function getCircuits(req: Request, res: Response) {
+function parseParams(req: Request, res: Response) {
     const {
         offset: offsetParam,
         limit: limitParam,
@@ -135,6 +116,59 @@ export function getCircuits(req: Request, res: Response) {
     const status = parseParamAsString(statusParam, undefined);
     const driverStandings = parseParamAsString(driverStandingsParam, undefined);
     const constructorStandings = parseParamAsString(constructorStandingsParam, undefined);
+
+    return {
+        offset,
+        limit,
+        year,
+        round,
+        constructor,
+        circuit,
+        driver,
+        grid,
+        result,
+        fastest,
+        status,
+        driverStandings,
+        constructorStandings,
+    };
+}
+
+interface CircuitResponse {
+    MRData: {
+        limit: string;
+        offset: string;
+        CircuitTable: {
+            circuitId?: string;
+            driverId?: string;
+            constructorId?: string;
+            grid?: string;
+            result?: string;
+            fastest?: string;
+            status?: string;
+            season?: string;
+            round?: string;
+            Circuits: Circuit[];
+        };
+    };
+}
+
+export function getCircuits(req: Request, res: Response) {
+    const {
+        offset,
+        limit,
+        year,
+        round,
+        constructor,
+        circuit,
+        driver,
+        grid,
+        result,
+        fastest,
+        status,
+        driverStandings,
+        constructorStandings,
+    } = parseParams(req, res);
 
     if (driverStandings || constructorStandings) {
         res.status(400).send("Bad Request: Circuit queries do not support standings qualifiers.").end();
