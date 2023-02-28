@@ -1,41 +1,99 @@
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from "../consts";
 import { getMySQLConnection } from "../connection";
+import { Request, Response } from "express";
 import path from "path";
 
-function formattedCircuits(row) {
-    const circuits = row.map((row) => {
-        return {
-            circuitId: row.circuitRef,
-            url: row.url,
-            circuitName: row.name,
-            Location: {
-                lat: row.lat.toString(),
-                long: row.lng.toString(),
-                alt: row.alt != null ? row.alt.toString() : "N/D",
-                locality: row.location,
-                country: row.country,
-            },
-        };
-    });
-    return circuits;
+interface CircuitDB {
+    circuitRef: string;
+    url: string;
+    name: string;
+    lat: number;
+    lng: number;
+    alt: number;
+    location: string;
+    country: string;
 }
 
-export function getCircuits(req, res) {
-    const offset = typeof req.query.offset != "undefined" ? parseInt(req.query.offset) : DEFAULT_OFFSET;
-    const limit = typeof req.query.limit != "undefined" ? parseInt(req.query.limit) : DEFAULT_LIMIT;
+interface Circuit {
+    circuitId: string; // TODO: rename to id
+    url: string;
+    circuitName: string; // TODO: rename to name
+    Location: {
+        // TODO: rename to location
+        lat: string; // TODO: number?
+        long: string; // TODO: number?
+        alt: string; // TODO: number?
+        locality: string;
+        country: string;
+    };
+}
+
+function formatCircuits(rows: CircuitDB[]): Circuit[] {
+    return rows.map((row) => ({
+        circuitId: row.circuitRef,
+        url: row.url,
+        circuitName: row.name,
+        Location: {
+            lat: row.lat.toString(),
+            long: row.lng.toString(),
+            alt: row.alt != null ? row.alt.toString() : "N/D",
+            locality: row.location,
+            country: row.country,
+        },
+    }));
+}
+
+function parseParamAsInt(param: Request["query"][keyof Request["query"]], defaultValue: number) {
+    if (typeof param === "string" || typeof param === "number") {
+        const paramAsInt = parseInt(param);
+
+        if (isNaN(paramAsInt)) {
+            return defaultValue;
+        }
+
+        return paramAsInt;
+    }
+
+    return defaultValue;
+}
+
+interface CircuitResponse {
+    MRData: {
+        limit: string;
+        offset: string;
+        CircuitTable: {
+            circuitId?: string;
+            driverId?: string;
+            constructorId?: string;
+            grid?: string;
+            result?: string;
+            fastest?: string;
+            status?: string;
+            season?: string;
+            round?: string;
+            Circuits: Circuit[];
+        };
+    };
+}
+
+export function getCircuits(req: Request, res: Response) {
+    const { offset: offsetParam, limit: limitParam } = req.query;
+
+    const offset = parseParamAsInt(offsetParam, DEFAULT_OFFSET);
+    const limit = parseParamAsInt(limitParam, DEFAULT_LIMIT);
 
     //START
-    let year = null;
-    let round = null;
-    let constructor = null;
-    let circuit = null;
-    let driver = null;
-    let grid = null;
-    let result = null;
-    let fastest = null;
-    let status = null;
-    let driverStandings = null;
-    let constructorStandings = null;
+    let year: any = null;
+    let round: any = null;
+    let constructor: any = null;
+    let circuit: any = null;
+    let driver: any = null;
+    let grid: any = null;
+    let result: any = null;
+    let fastest: any = null;
+    let status: any = null;
+    let driverStandings: any = null;
+    let constructorStandings: any = null;
 
     for (const key in req.query) {
         if (key != "offset" && key != "limit" && key != "sql") {
@@ -112,8 +170,8 @@ export function getCircuits(req, res) {
     if (round) sql += ` AND races.round='${round}'`;
     sql += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
 
-    const conn = getMySQLConnection();
-    conn.query(sql, (err, rows, fields) => {
+    const mySQLConnection = getMySQLConnection();
+    mySQLConnection.query(sql, (err, rows, fields) => {
         if (err) {
             console.log("Failed to query for " + __filename.slice(__filename.lastIndexOf(path.sep) + 1) + ": " + err);
             res.status(400).send({ error: err.sqlMessage, sql: err.sql }).end();
@@ -124,11 +182,13 @@ export function getCircuits(req, res) {
             return;
         }
 
-        const json = {
+        const json: CircuitResponse = {
             MRData: {
                 limit: limit.toString(),
                 offset: offset.toString(),
-                CircuitTable: {},
+                CircuitTable: {
+                    Circuits: formatCircuits(rows),
+                },
             },
         };
 
@@ -142,7 +202,6 @@ export function getCircuits(req, res) {
         if (year) json.MRData.CircuitTable.season = year;
         if (round) json.MRData.CircuitTable.round = round;
 
-        json.MRData.CircuitTable.Circuits = formattedCircuits(rows);
         res.json(json);
     });
 }
