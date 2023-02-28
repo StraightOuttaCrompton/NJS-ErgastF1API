@@ -65,6 +65,10 @@ function parseParamAsString<T = string | undefined>(param: Request["query"][keyo
     return param;
 }
 
+function parseSqlParam(param: Request["query"][keyof Request["query"]]) {
+    return param === "true";
+}
+
 function parseParams(req: Request, res: Response) {
     const {
         offset: offsetParam,
@@ -117,6 +121,8 @@ function parseParams(req: Request, res: Response) {
     const driverStandings = parseParamAsString(driverStandingsParam, undefined);
     const constructorStandings = parseParamAsString(constructorStandingsParam, undefined);
 
+    const returnSqlQuery = parseSqlParam(sqlParam);
+
     return {
         offset,
         limit,
@@ -131,6 +137,7 @@ function parseParams(req: Request, res: Response) {
         status,
         driverStandings,
         constructorStandings,
+        returnSqlQuery,
     };
 }
 
@@ -168,6 +175,7 @@ export function getCircuits(req: Request, res: Response) {
         status,
         driverStandings,
         constructorStandings,
+        returnSqlQuery,
     } = parseParams(req, res);
 
     if (driverStandings || constructorStandings) {
@@ -175,39 +183,39 @@ export function getCircuits(req: Request, res: Response) {
         return;
     }
 
-    let sql =
+    let sqlQuery =
         "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits";
-    if (year || driver || constructor || status || grid || fastest || result) sql += ", races";
-    if (driver || constructor || status || grid || fastest || result) sql += ", results";
-    if (driver) sql += ", drivers";
-    if (constructor) sql += ", constructors";
-    sql += " WHERE TRUE";
+    if (year || driver || constructor || status || grid || fastest || result) sqlQuery += ", races";
+    if (driver || constructor || status || grid || fastest || result) sqlQuery += ", results";
+    if (driver) sqlQuery += ", drivers";
+    if (constructor) sqlQuery += ", constructors";
+    sqlQuery += " WHERE TRUE";
 
     //Set the join
     if (year || driver || constructor || status || grid || fastest || result)
-        sql += " AND races.circuitId=circuits.circuitId";
-    if (circuit) sql += ` AND circuits.circuitRef='${circuit}'`;
-    if (driver || constructor || status || grid || fastest || result) sql += " AND results.raceId=races.raceId";
+        sqlQuery += " AND races.circuitId=circuits.circuitId";
+    if (circuit) sqlQuery += ` AND circuits.circuitRef='${circuit}'`;
+    if (driver || constructor || status || grid || fastest || result) sqlQuery += " AND results.raceId=races.raceId";
     if (constructor)
-        sql += ` AND results.constructorId=constructors.constructorId AND constructors.constructorRef='${constructor}'`;
-    if (driver) sql += ` AND results.driverId=drivers.driverId AND drivers.driverRef='${driver}'`;
-    if (status) sql += ` AND results.statusId='${status}'`;
-    if (grid) sql += ` AND results.grid='${grid}'`;
-    if (fastest) sql += ` AND results.rank='${fastest}'`;
-    if (result) sql += ` AND results.positionText='${result}'`;
-    if (year) sql += ` AND races.year='${year}'`;
-    if (round) sql += ` AND races.round='${round}'`;
-    sql += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
+        sqlQuery += ` AND results.constructorId=constructors.constructorId AND constructors.constructorRef='${constructor}'`;
+    if (driver) sqlQuery += ` AND results.driverId=drivers.driverId AND drivers.driverRef='${driver}'`;
+    if (status) sqlQuery += ` AND results.statusId='${status}'`;
+    if (grid) sqlQuery += ` AND results.grid='${grid}'`;
+    if (fastest) sqlQuery += ` AND results.rank='${fastest}'`;
+    if (result) sqlQuery += ` AND results.positionText='${result}'`;
+    if (year) sqlQuery += ` AND races.year='${year}'`;
+    if (round) sqlQuery += ` AND races.round='${round}'`;
+    sqlQuery += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
 
     const mySQLConnection = getMySQLConnection();
-    mySQLConnection.query(sql, (err, rows, fields) => {
+    mySQLConnection.query(sqlQuery, (err, rows, fields) => {
         if (err) {
             console.log("Failed to query for " + __filename.slice(__filename.lastIndexOf(path.sep) + 1) + ": " + err);
             res.status(400).send({ error: err.sqlMessage, sql: err.sql }).end();
             return;
         }
-        if (sqlParam == "true") {
-            res.status(200).send(sql).end();
+        if (returnSqlQuery) {
+            res.status(200).send(sqlQuery).end();
             return;
         }
 
