@@ -2,7 +2,7 @@ import { pool } from "../connection";
 import request from "supertest";
 import app from "../app";
 import querystring from "querystring";
-import { testLimitQueryParameter, testOffsetQueryParameter, testSqlQueryParameter } from "tests/utils";
+import { testLimitQueryParameter, testOffsetQueryParameter, testSqlQueryParameter } from "../tests/utils";
 
 describe("GET /circuits", () => {
     const endpoint = "/circuits";
@@ -598,25 +598,30 @@ describe("GET /circuits", () => {
 
         it("returns circuits which TODO:", async () => {
             const url = `${endpoint}?${querystring.stringify({
-                status: "Finished",
+                status: 1,
             })}`;
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(0);
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
+                circuitId: "adelaide",
+                circuitName: "Adelaide Street Circuit",
+                url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
+            });
         });
 
         it("returns correct sql", async () => {
             const url = `${endpoint}?${querystring.stringify({
-                status: "Disqualified",
+                status: 1,
                 sql: true,
             })}`;
 
             const response = await request(app).get(url);
 
             expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.statusId='Disqualified' ORDER BY circuits.circuitRef LIMIT 0, 30"
+                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.statusId='1' ORDER BY circuits.circuitRef LIMIT 0, 30"
             );
         });
     });

@@ -1,0 +1,62 @@
+[
+    {
+        "circuitId": "interlagos",
+        "url": "http://en.wikipedia.org/wiki/Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace",
+        "circuitName": "Autódromo José Carlos Pace",
+        "Location": {
+            "lat": "-23.7036",
+            "long": "-46.6997",
+            "alt": "785",
+            "locality": "São Paulo",
+            "country": "Brazil"
+        }
+    },
+    {
+        "circuitId": "monaco",
+        "url": "http://en.wikipedia.org/wiki/Circuit_de_Monaco",
+        "circuitName": "Circuit de Monaco",
+        "Location": {
+            "lat": "43.7347",
+            "long": "7.42056",
+            "alt": "7",
+            "locality": "Monte-Carlo",
+            "country": "Monaco"
+        }
+    },
+    {
+        "circuitId": "silverstone",
+        "url": "http://en.wikipedia.org/wiki/Silverstone_Circuit",
+        "circuitName": "Silverstone Circuit",
+        "Location": {
+            "lat": "52.0786",
+            "long": "-1.01694",
+            "alt": "153",
+            "locality": "Silverstone",
+            "country": "UK"
+        }
+    },
+    {
+        "circuitId": "spa",
+        "url": "http://en.wikipedia.org/wiki/Circuit_de_Spa-Francorchamps",
+        "circuitName": "Circuit de Spa-Francorchamps",
+        "Location": {
+            "lat": "50.4372",
+            "long": "5.97139",
+            "alt": "401",
+            "locality": "Spa",
+            "country": "Belgium"
+        }
+    },
+    {
+        "circuitId": "yas_marina",
+        "url": "http://en.wikipedia.org/wiki/Yas_Marina_Circuit",
+        "circuitName": "Yas Marina Circuit",
+        "Location": {
+            "lat": "24.4672",
+            "long": "54.6031",
+            "alt": "3",
+            "locality": "Abu Dhabi",
+            "country": "UAE"
+        }
+    }
+]
