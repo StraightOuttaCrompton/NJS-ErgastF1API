@@ -2,6 +2,7 @@ import { pool } from "../connection";
 import request from "supertest";
 import app from "../app";
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from "../consts";
+import querystring from "querystring";
 
 function testLimitQueryParameter(endpoint: string) {
     describe("limit", () => {
@@ -14,8 +15,9 @@ function testLimitQueryParameter(endpoint: string) {
         });
 
         // it(`defaults to ${DEFAULT_LIMIT} if 'limit' query parameter is negative`, async () => {
-        //     const limit = "-1";
-        //     const url = `${endpoint}?limit=${limit}`;
+        // const url = `${endpoint}?${querystring.stringify({
+        //     limit: -1,
+        // })}`;
 
         //     const response = await request(app).get(url);
 
@@ -33,7 +35,9 @@ function testLimitQueryParameter(endpoint: string) {
 
         it(`returns a number of items equal to limit`, async () => {
             const limit = 10;
-            const url = `${endpoint}?limit=${limit}`;
+            const url = `${endpoint}?${querystring.stringify({
+                limit,
+            })}`;
 
             const response = await request(app).get(url);
 
@@ -57,17 +61,18 @@ function testOffsetQueryParameter(
         });
 
         // it(`defaults to ${DEFAULT_OFFSET} if 'offset' query parameter is negative`, async () => {
-        //     const offset = '-1';
-        //     const url = `${endpoint}?offset=${offset}`;
-
+        // const url = `${endpoint}?${querystring.stringify({
+        //     offset: -1,
+        // })}`;
         //     const response = await request(app).get(url);
 
         //     expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual(expectedItems[0]);
         // });
 
         // it(`defaults to ${DEFAULT_OFFSET} if 'offset' query parameter is not a number`, async () => {
-        //     const offset = 'blah';
-        //     const url = `${endpoint}?offset=${offset}`;
+        // const url = `${endpoint}?${querystring.stringify({
+        //     offset: 'blah',
+        // })}`;
 
         //     const response = await request(app).get(url);
 
@@ -75,8 +80,9 @@ function testOffsetQueryParameter(
         // });
 
         it(`offsets response by the number provided in the offset query parameter`, async () => {
-            const offset = 1;
-            const url = `${endpoint}?offset=${offset}`;
+            const url = `${endpoint}?${querystring.stringify({
+                offset: 1,
+            })}`;
 
             const response = await request(app).get(url);
             expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual(expectedItems[1]);
@@ -95,7 +101,9 @@ function testSqlQueryParameter(endpoint: string, expectedSqlQuery: string) {
         });
 
         it(`returns json if 'sql' query parameter is not 'true'`, async () => {
-            const url = `${endpoint}?sql=blah`;
+            const url = `${endpoint}?${querystring.stringify({
+                sql: "blah",
+            })}`;
 
             const response = await request(app).get(url);
 
@@ -103,7 +111,9 @@ function testSqlQueryParameter(endpoint: string, expectedSqlQuery: string) {
         });
 
         it(`returns sql query if 'sql' query parameter is 'true'`, async () => {
-            const url = `${endpoint}?sql=true`;
+            const url = `${endpoint}?${querystring.stringify({
+                sql: true,
+            })}`;
 
             const response = await request(app).get(url);
 
@@ -127,8 +137,9 @@ describe("GET /circuits", () => {
     });
 
     it("returns an array of circuits", async () => {
-        const limit = 2;
-        const url = `${endpoint}?limit=${limit}`;
+        const url = `${endpoint}?${querystring.stringify({
+            limit: 2,
+        })}`;
 
         const response = await request(app).get(url);
 
@@ -184,7 +195,10 @@ describe("GET /circuits", () => {
 
     describe("driverStandings", () => {
         it(`does not support 'driverStandings' query parameter`, async () => {
-            const url = `${endpoint}?driverStandings=true`;
+            const url = `${endpoint}?${querystring.stringify({
+                driverStandings: true,
+            })}`;
+
             const response = await request(app).get(url);
 
             expect(response.statusCode).toBe(400);
@@ -193,10 +207,84 @@ describe("GET /circuits", () => {
 
     describe("constructorStandings", () => {
         it(`does not support 'constructorStandings' query parameter`, async () => {
-            const url = `${endpoint}?constructorStandings=true`;
+            const url = `${endpoint}?${querystring.stringify({
+                constructorStandings: true,
+            })}`;
+
             const response = await request(app).get(url);
 
             expect(response.statusCode).toBe(400);
         });
     });
+
+    describe("year", () => {
+        it("returns all circuits if year is undefined", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                year: undefined,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
+                circuitId: "adelaide",
+                circuitName: "Adelaide Street Circuit",
+                url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
+            });
+        });
+
+        it("returns circuits from correct year", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                year: 2022,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(22);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                Location: {
+                    alt: "10",
+                    country: "Australia",
+                    lat: "-37.8497",
+                    locality: "Melbourne",
+                    long: "144.968",
+                },
+                circuitId: "albert_park",
+                circuitName: "Albert Park Grand Prix Circuit",
+                url: "http://en.wikipedia.org/wiki/Melbourne_Grand_Prix_Circuit",
+            });
+        });
+
+        it("returns correct sql", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                year: 2022,
+                sql: true,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.text).toBe(
+                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races WHERE TRUE AND races.circuitId=circuits.circuitId AND races.year='2022' ORDER BY circuits.circuitRef LIMIT 0, 30"
+            );
+        });
+
+        it("returns circuits from current year if year is 'current'", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                year: "current",
+            })}`;
+            const currentYearUrl = `${endpoint}?${querystring.stringify({
+                year: new Date().getFullYear(),
+            })}`;
+
+            const response = await request(app).get(url);
+            const currentYearResponse = await request(app).get(currentYearUrl);
+
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual(
+                currentYearResponse.body.MRData.CircuitTable.Circuits
+            );
+        });
+    });
 });
+
+// smoke tests
