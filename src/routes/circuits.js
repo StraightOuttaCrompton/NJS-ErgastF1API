@@ -26,9 +26,9 @@ export function getCircuits(req, res) {
 
     //START
     let year = null; //
-    let round = null;
-    let constructor = null;
-    let circuit = null;
+    let round = null; //
+    let constructor = null; //
+    let circuit = null; //
     let driver = null;
     let grid = null;
     let result = null;
