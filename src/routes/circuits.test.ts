@@ -246,6 +246,16 @@ describe("GET /circuits", () => {
             });
         });
 
+        it("returns no circuits if year is invalid", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                year: 1,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+        });
+
         it("returns circuits from correct year", async () => {
             const url = `${endpoint}?${querystring.stringify({
                 year: 2022,
@@ -315,6 +325,16 @@ describe("GET /circuits", () => {
             });
         });
 
+        it("returns no circuits if constructor is invalid", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                constructor: "superfastcars",
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+        });
+
         it("returns circuits where the constructor has competed", async () => {
             const url = `${endpoint}?${querystring.stringify({
                 constructor: "bugatti",
@@ -366,6 +386,16 @@ describe("GET /circuits", () => {
             });
         });
 
+        it("returns no circuits if circuit is invalid", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                circuit: "supercooltrack",
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+        });
+
         it("returns 1 circuit when circuit is defined", async () => {
             const url = `${endpoint}?${querystring.stringify({
                 circuit: "monza",
@@ -400,7 +430,7 @@ describe("GET /circuits", () => {
             const response = await request(app).get(url);
 
             expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results, constructors WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.constructorId=constructors.constructorId AND constructors.constructorRef='mclaren' ORDER BY circuits.circuitRef LIMIT 0, 30"
+                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits WHERE TRUE AND circuits.circuitRef='monza' ORDER BY circuits.circuitRef LIMIT 0, 30"
             );
         });
     });
@@ -420,6 +450,16 @@ describe("GET /circuits", () => {
                 circuitName: "Adelaide Street Circuit",
                 url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
             });
+        });
+
+        it("returns no circuits if driver is invalid", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                driver: "santaclause",
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
         });
 
         it("returns circuits where the driver has competed", async () => {
