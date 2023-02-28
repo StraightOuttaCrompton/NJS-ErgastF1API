@@ -621,7 +621,7 @@ describe("GET /circuits", () => {
         });
     });
 
-    // TODO: what does this even mean?
+    // TODO: what does this even mean in this context?
     describe("fastest", () => {
         it("returns all circuits if fastest is undefined", async () => {
             const url = `${endpoint}?${querystring.stringify({
@@ -684,6 +684,57 @@ describe("GET /circuits", () => {
             );
         });
     });
-});
 
-// smoke tests
+    // TODO: what does this even mean in this context?
+    describe("status", () => {
+        it("returns all circuits if status is undefined", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                status: undefined,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
+                circuitId: "adelaide",
+                circuitName: "Adelaide Street Circuit",
+                url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
+            });
+        });
+
+        it("returns no circuits if status is invalid", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                status: "invalid",
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+        });
+
+        it("returns circuits which TODO:", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                status: "Finished",
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(0);
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+        });
+
+        it("returns correct sql", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                status: "Disqualified",
+                sql: true,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.text).toBe(
+                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.statusId='Disqualified' ORDER BY circuits.circuitRef LIMIT 0, 30"
+            );
+        });
+    });
+});

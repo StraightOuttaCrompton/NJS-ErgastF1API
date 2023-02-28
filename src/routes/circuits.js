@@ -25,17 +25,17 @@ export function getCircuits(req, res) {
     const limit = typeof req.query.limit != "undefined" ? parseInt(req.query.limit) : DEFAULT_LIMIT;
 
     //START
-    let year = null; //
-    let round = null; //
-    let constructor = null; //
-    let circuit = null; //
-    let driver = null; //
-    let grid = null; //
-    let result = null; //
-    let fastest = null; //
+    let year = null;
+    let round = null;
+    let constructor = null;
+    let circuit = null;
+    let driver = null;
+    let grid = null;
+    let result = null;
+    let fastest = null;
     let status = null;
-    let driverStandings = null; //
-    let constructorStandings = null; //
+    let driverStandings = null;
+    let constructorStandings = null;
 
     for (const key in req.query) {
         if (key != "offset" && key != "limit" && key != "sql") {
