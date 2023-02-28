@@ -30,7 +30,7 @@ export function getCircuits(req, res) {
     let constructor = null; //
     let circuit = null; //
     let driver = null; //
-    let grid = null;
+    let grid = null; //
     let result = null;
     let fastest = null;
     let status = null;

@@ -499,6 +499,64 @@ describe("GET /circuits", () => {
             );
         });
     });
+
+    // TODO: should this be a separate endpoint?
+    describe("grid", () => {
+        it("returns all circuits if grid is undefined", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                grid: undefined,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
+                circuitId: "adelaide",
+                circuitName: "Adelaide Street Circuit",
+                url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
+            });
+        });
+
+        it("returns no circuits if driver is invalid", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                grid: -1,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+        });
+
+        it("returns circuits which contains the grid position", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                grid: 30,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(7);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                Location: { alt: "20", country: "UK", lat: "53.4769", locality: "Liverpool", long: "-2.94056" },
+                circuitId: "aintree",
+                circuitName: "Aintree",
+                url: "http://en.wikipedia.org/wiki/Aintree_Motor_Racing_Circuit",
+            });
+        });
+
+        it("returns correct sql", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                grid: 30,
+                sql: true,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.text).toBe(
+                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.grid='30' ORDER BY circuits.circuitRef LIMIT 0, 30"
+            );
+        });
+    });
 });
 
 // smoke tests
