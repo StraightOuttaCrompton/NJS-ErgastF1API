@@ -592,7 +592,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(7);
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(1);
             expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
                 circuitId: "indianapolis",
                 url: "http://en.wikipedia.org/wiki/Indianapolis_Motor_Speedway",
@@ -607,7 +607,7 @@ describe("GET /circuits", () => {
             });
         });
 
-        it.only("returns correct sql", async () => {
+        it("returns correct sql", async () => {
             const url = `${endpoint}?${querystring.stringify({
                 result: 30,
                 sql: true,
@@ -617,6 +617,70 @@ describe("GET /circuits", () => {
 
             expect(response.text).toBe(
                 "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.positionText='30' ORDER BY circuits.circuitRef LIMIT 0, 30"
+            );
+        });
+    });
+
+    // TODO: what does this even mean?
+    describe("fastest", () => {
+        it("returns all circuits if fastest is undefined", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                fastest: undefined,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
+                circuitId: "adelaide",
+                circuitName: "Adelaide Street Circuit",
+                url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
+            });
+        });
+
+        it("returns no circuits if fastest is invalid", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                fastest: -1,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+        });
+
+        it("returns circuits which TODO:", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                fastest: 24,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(18);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                circuitId: "americas",
+                url: "http://en.wikipedia.org/wiki/Circuit_of_the_Americas",
+                circuitName: "Circuit of the Americas",
+                Location: {
+                    lat: "30.1328",
+                    long: "-97.6411",
+                    alt: "161",
+                    locality: "Austin",
+                    country: "USA",
+                },
+            });
+        });
+
+        it("returns correct sql", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                fastest: 30,
+                sql: true,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.text).toBe(
+                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.rank='30' ORDER BY circuits.circuitRef LIMIT 0, 30"
             );
         });
     });

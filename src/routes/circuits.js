@@ -32,7 +32,7 @@ export function getCircuits(req, res) {
     let driver = null; //
     let grid = null; //
     let result = null; //
-    let fastest = null;
+    let fastest = null; //
     let status = null;
     let driverStandings = null; //
     let constructorStandings = null; //
