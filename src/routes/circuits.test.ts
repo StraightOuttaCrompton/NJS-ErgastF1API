@@ -404,6 +404,61 @@ describe("GET /circuits", () => {
             );
         });
     });
+
+    describe("driver", () => {
+        it("returns all circuits if driver is undefined", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                driver: undefined,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
+            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+                Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
+                circuitId: "adelaide",
+                circuitName: "Adelaide Street Circuit",
+                url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
+            });
+        });
+
+        it("returns circuits where the driver has competed", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                driver: "ader",
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(1);
+            expect(response.body.MRData.CircuitTable.Circuits).toEqual([
+                {
+                    circuitId: "indianapolis",
+                    url: "http://en.wikipedia.org/wiki/Indianapolis_Motor_Speedway",
+                    circuitName: "Indianapolis Motor Speedway",
+                    Location: {
+                        lat: "39.795",
+                        long: "-86.2347",
+                        alt: "223",
+                        locality: "Indianapolis",
+                        country: "USA",
+                    },
+                },
+            ]);
+        });
+
+        it("returns correct sql", async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                driver: "hamilton",
+                sql: true,
+            })}`;
+
+            const response = await request(app).get(url);
+
+            expect(response.text).toBe(
+                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results, drivers WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.driverId=drivers.driverId AND drivers.driverRef='hamilton' ORDER BY circuits.circuitRef LIMIT 0, 30"
+            );
+        });
+    });
 });
 
 // smoke tests
