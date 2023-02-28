@@ -43,7 +43,7 @@ function formatCircuits(rows: CircuitDB[]): Circuit[] {
     }));
 }
 
-function parseParamAsInt(param: Request["query"][keyof Request["query"]], defaultValue: number) {
+function parseParamAsInt<T = number | undefined>(param: Request["query"][keyof Request["query"]], defaultValue: T) {
     if (typeof param === "string" || typeof param === "number") {
         const paramAsInt = parseInt(param);
 
@@ -55,6 +55,14 @@ function parseParamAsInt(param: Request["query"][keyof Request["query"]], defaul
     }
 
     return defaultValue;
+}
+
+function parseParamAsString<T = string | undefined>(param: Request["query"][keyof Request["query"]], defaultValue: T) {
+    if (typeof param !== "string") {
+        return defaultValue;
+    }
+
+    return param;
 }
 
 interface CircuitResponse {
@@ -77,69 +85,56 @@ interface CircuitResponse {
 }
 
 export function getCircuits(req: Request, res: Response) {
-    const { offset: offsetParam, limit: limitParam } = req.query;
+    const {
+        offset: offsetParam,
+        limit: limitParam,
+        year: yearParam,
+        round: roundParam,
+        constructor: constructorParam,
+        circuit: circuitParam,
+        driver: driverParam,
+        grid: gridParam,
+        result: resultParam,
+        fastest: fastestParam,
+        status: statusParam,
+        driverStandings: driverStandingsParam,
+        constructorStandings: constructorStandingsParam,
+        sql: sqlParam,
+        ...rest
+    } = req.query;
+
+    if (Object.entries(rest).length) {
+        res.status(400).send("Bad Request: Check the get params").end();
+    }
 
     const offset = parseParamAsInt(offsetParam, DEFAULT_OFFSET);
     const limit = parseParamAsInt(limitParam, DEFAULT_LIMIT);
 
-    //START
-    let year: any = null;
-    let round: any = null;
-    let constructor: any = null;
-    let circuit: any = null;
-    let driver: any = null;
-    let grid: any = null;
-    let result: any = null;
-    let fastest: any = null;
-    let status: any = null;
-    let driverStandings: any = null;
-    let constructorStandings: any = null;
-
-    for (const key in req.query) {
-        if (key != "offset" && key != "limit" && key != "sql") {
-            switch (key) {
-                case "year":
-                    req.query[key] == "current"
-                        ? (year = new Date().getFullYear().toString())
-                        : (year = req.query[key]);
-                    break;
-                case "round":
-                    round = req.query[key];
-                    break;
-                case "constructor":
-                    constructor = req.query[key];
-                    break;
-                case "circuit":
-                    circuit = req.query[key];
-                    break;
-                case "driver":
-                    driver = req.query[key];
-                    break;
-                case "grid":
-                    grid = req.query[key];
-                    break;
-                case "result":
-                    result = req.query[key];
-                    break;
-                case "fastest":
-                    fastest = req.query[key];
-                    break;
-                case "status":
-                    status = req.query[key];
-                    break;
-                case "driverStandings":
-                    driverStandings = req.query[key];
-                    break;
-                case "constructorStandings":
-                    constructorStandings = req.query[key];
-                    break;
-                default:
-                    res.status(400).send("Bad Request: Check the get params").end();
-                    return;
-                    break;
-            }
+    const year: string | undefined = (() => {
+        if (typeof yearParam !== "string") {
+            return undefined;
         }
-    }
+
+        if (yearParam === "current") {
+            return new Date().getFullYear().toString();
+        }
+        return yearParam;
+    })();
+
+    const round = parseParamAsString(roundParam, undefined);
+    const constructor = parseParamAsString(
+        // @ts-ignore
+        constructorParam,
+        undefined
+    );
+    const circuit = parseParamAsString(circuitParam, undefined);
+    const driver = parseParamAsString(driverParam, undefined);
+    const grid = parseParamAsString(gridParam, undefined);
+    const result = parseParamAsString(resultParam, undefined);
+    const fastest = parseParamAsString(fastestParam, undefined);
+    const status = parseParamAsString(statusParam, undefined);
+    const driverStandings = parseParamAsString(driverStandingsParam, undefined);
+    const constructorStandings = parseParamAsString(constructorStandingsParam, undefined);
 
     if (driverStandings || constructorStandings) {
         res.status(400).send("Bad Request: Circuit queries do not support standings qualifiers.").end();
@@ -177,7 +172,7 @@ export function getCircuits(req: Request, res: Response) {
             res.status(400).send({ error: err.sqlMessage, sql: err.sql }).end();
             return;
         }
-        if (req.query.sql == "true") {
+        if (sqlParam == "true") {
             res.status(200).send(sql).end();
             return;
         }
