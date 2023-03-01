@@ -2,6 +2,8 @@ import { DEFAULT_LIMIT, DEFAULT_OFFSET } from "../consts";
 import { getMySQLConnection } from "../connection";
 import { Request, Response } from "express";
 import path from "path";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 interface CircuitDB {
     circuitRef: string;
