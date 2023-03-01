@@ -43,6 +43,55 @@ function formatCircuits(rows: CircuitDB[]): Circuit[] {
     }));
 }
 
+function formatResponse(
+    rows: CircuitDB[],
+    {
+        offset,
+        limit,
+        year,
+        round,
+        constructor,
+        circuit,
+        driver,
+        grid,
+        result,
+        fastest,
+        status,
+    }: {
+        offset: number;
+        limit: number;
+        year: string | undefined;
+        round: string | undefined;
+        constructor: string | undefined;
+        circuit: string | undefined;
+        driver: string | undefined;
+        grid: string | undefined;
+        result: string | undefined;
+        fastest: string | undefined;
+        status: string | undefined;
+    }
+) {
+    const json: CircuitResponse = {
+        MRData: {
+            limit: limit.toString(),
+            offset: offset.toString(),
+            CircuitTable: {
+                Circuits: formatCircuits(rows),
+            },
+        },
+    };
+
+    if (year) json.MRData.CircuitTable.season = year;
+    if (round) json.MRData.CircuitTable.round = round;
+    if (constructor) json.MRData.CircuitTable.constructorId = constructor;
+    if (circuit) json.MRData.CircuitTable.circuitId = circuit;
+    if (driver) json.MRData.CircuitTable.driverId = driver;
+    if (grid) json.MRData.CircuitTable.grid = grid;
+    if (result) json.MRData.CircuitTable.result = result;
+    if (fastest) json.MRData.CircuitTable.fastest = fastest;
+    if (status) json.MRData.CircuitTable.status = status;
+}
+
 function parseParamAsInt<T = number | undefined>(param: Request["query"][keyof Request["query"]], defaultValue: T) {
     if (typeof param === "string" || typeof param === "number") {
         const paramAsInt = parseInt(param);
@@ -90,6 +139,14 @@ function parseParams(req: Request, res: Response) {
 
     if (Object.entries(rest).length) {
         res.status(400).send("Bad Request: Check the get params").end();
+        return;
+    }
+
+    const driverStandings = parseParamAsString(driverStandingsParam, undefined);
+    const constructorStandings = parseParamAsString(constructorStandingsParam, undefined);
+    if (driverStandings || constructorStandings) {
+        res.status(400).send("Bad Request: Circuit queries do not support standings qualifiers.").end();
+        return;
     }
 
     const offset = parseParamAsInt(offsetParam, DEFAULT_OFFSET);
@@ -118,8 +175,6 @@ function parseParams(req: Request, res: Response) {
     const result = parseParamAsString(resultParam, undefined);
     const fastest = parseParamAsString(fastestParam, undefined);
     const status = parseParamAsString(statusParam, undefined);
-    const driverStandings = parseParamAsString(driverStandingsParam, undefined);
-    const constructorStandings = parseParamAsString(constructorStandingsParam, undefined);
 
     const returnSqlQuery = parseSqlParam(sqlParam);
 
@@ -213,27 +268,13 @@ interface CircuitResponse {
 }
 
 export function getCircuits(req: Request, res: Response) {
-    const {
-        offset,
-        limit,
-        year,
-        round,
-        constructor,
-        circuit,
-        driver,
-        grid,
-        result,
-        fastest,
-        status,
-        driverStandings,
-        constructorStandings,
-        returnSqlQuery,
-    } = parseParams(req, res);
-
-    if (driverStandings || constructorStandings) {
-        res.status(400).send("Bad Request: Circuit queries do not support standings qualifiers.").end();
+    const params = parseParams(req, res);
+    if (!params) {
         return;
     }
+
+    const { offset, limit, year, round, constructor, circuit, driver, grid, result, fastest, status, returnSqlQuery } =
+        params;
 
     const sqlQuery = getSqlQuery({
         offset,
@@ -250,37 +291,42 @@ export function getCircuits(req: Request, res: Response) {
     });
 
     const mySQLConnection = getMySQLConnection();
-    mySQLConnection.query(sqlQuery, (err, rows, fields) => {
-        if (err) {
-            console.log("Failed to query for " + __filename.slice(__filename.lastIndexOf(path.sep) + 1) + ": " + err);
-            res.status(400).send({ error: err.sqlMessage, sql: err.sql }).end();
-            return;
+    mySQLConnection.query(
+        sqlQuery,
+        (
+            err,
+            // TODO: how to type rows?
+            rows,
+            fields
+        ) => {
+            if (err) {
+                console.log(
+                    "Failed to query for " + __filename.slice(__filename.lastIndexOf(path.sep) + 1) + ": " + err
+                );
+                res.status(400).send({ error: err.sqlMessage, sql: err.sql }).end();
+                return;
+            }
+
+            if (returnSqlQuery) {
+                res.status(200).send(sqlQuery).end();
+                return;
+            }
+
+            const response = formatResponse(rows, {
+                offset,
+                limit,
+                year,
+                round,
+                constructor,
+                circuit,
+                driver,
+                grid,
+                result,
+                fastest,
+                status,
+            });
+
+            res.json(response);
         }
-        if (returnSqlQuery) {
-            res.status(200).send(sqlQuery).end();
-            return;
-        }
-
-        const json: CircuitResponse = {
-            MRData: {
-                limit: limit.toString(),
-                offset: offset.toString(),
-                CircuitTable: {
-                    Circuits: formatCircuits(rows),
-                },
-            },
-        };
-
-        if (circuit) json.MRData.CircuitTable.circuitId = circuit;
-        if (driver) json.MRData.CircuitTable.driverId = driver;
-        if (constructor) json.MRData.CircuitTable.constructorId = constructor;
-        if (grid) json.MRData.CircuitTable.grid = grid;
-        if (result) json.MRData.CircuitTable.result = result;
-        if (fastest) json.MRData.CircuitTable.fastest = fastest;
-        if (status) json.MRData.CircuitTable.status = status;
-        if (year) json.MRData.CircuitTable.season = year;
-        if (round) json.MRData.CircuitTable.round = round;
-
-        res.json(json);
-    });
+    );
 }
