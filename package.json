@@ -9,7 +9,8 @@
         "format-files": "prettier --write .",
         "test": "jest",
         "prisma:pull": "prisma db pull",
-        "prisma:generate": "prisma generate"
+        "prisma:generate": "prisma generate",
+        "prisma:studio": "prisma studio"
     },
     "author": "Davide Albiero",
     "license": "ISC",
