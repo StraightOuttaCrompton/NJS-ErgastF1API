@@ -92,6 +92,8 @@ function formatResponse(
     if (result) json.MRData.CircuitTable.result = result;
     if (fastest) json.MRData.CircuitTable.fastest = fastest;
     if (status) json.MRData.CircuitTable.status = status;
+
+    return json;
 }
 
 function parseParamAsInt<T = number | undefined>(param: Request["query"][keyof Request["query"]], defaultValue: T) {
