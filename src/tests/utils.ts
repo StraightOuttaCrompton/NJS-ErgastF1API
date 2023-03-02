@@ -84,7 +84,7 @@ export function testOffsetQueryParameter(
             })}`;
 
             const response = await request(app).get(url);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual(expectedItems[1]);
+            expect(transformResponse(response)[0]).toEqual(expectedItems[1]);
         });
     });
 }
