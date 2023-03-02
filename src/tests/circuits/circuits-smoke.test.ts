@@ -22,7 +22,7 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body.MRData.CircuitTable.Circuits).toEqual(all);
+        expect(response.body).toEqual(all);
     });
 
     test("bottas", async () => {

@@ -2,19 +2,19 @@ import { DEFAULT_LIMIT, DEFAULT_OFFSET } from "../consts";
 import { getMySQLConnection } from "../connection";
 import { Request, Response } from "express";
 import path from "path";
-import { PrismaClient } from "@prisma/client";
+import { circuits, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-interface CircuitDB {
-    circuitRef: string;
-    url: string;
-    name: string;
-    lat: number;
-    lng: number;
-    alt: number;
-    location: string;
-    country: string;
-}
+// interface CircuitDB {
+//     circuitRef: string;
+//     url: string;
+//     name: string;
+//     lat: number;
+//     lng: number;
+//     alt: number;
+//     location: string;
+//     country: string;
+// }
 
 interface Circuit {
     circuitId: string; // TODO: rename to id
@@ -30,23 +30,24 @@ interface Circuit {
     };
 }
 
-function formatCircuits(rows: CircuitDB[]): Circuit[] {
+function formatCircuits(rows: circuits[]): Circuit[] {
     return rows.map((row) => ({
         circuitId: row.circuitRef,
         url: row.url,
         circuitName: row.name,
         Location: {
-            lat: row.lat.toString(),
-            long: row.lng.toString(),
+            // TODO: don't default to 0 here
+            lat: (row.lat || 0).toString() || "",
+            long: (row.lng || 0).toString() || "",
             alt: row.alt != null ? row.alt.toString() : "N/D",
-            locality: row.location,
-            country: row.country,
+            locality: row.location || "",
+            country: row.country || "",
         },
     }));
 }
 
 function formatResponse(
-    rows: CircuitDB[],
+    rows: circuits[],
     {
         offset,
         limit,
@@ -271,7 +272,7 @@ interface CircuitResponse {
     };
 }
 
-export function getCircuits(req: Request, res: Response) {
+export async function getCircuits(req: Request, res: Response) {
     const params = parseParams(req, res);
     if (!params) {
         return;
@@ -294,43 +295,52 @@ export function getCircuits(req: Request, res: Response) {
         status,
     });
 
-    const mySQLConnection = getMySQLConnection();
-    mySQLConnection.query(
-        sqlQuery,
-        (
-            err,
-            // TODO: how to type rows?
-            rows,
-            fields
-        ) => {
-            if (err) {
-                console.log(
-                    "Failed to query for " + __filename.slice(__filename.lastIndexOf(path.sep) + 1) + ": " + err
-                );
-                res.status(400).send({ error: err.sqlMessage, sql: err.sql }).end();
-                return;
-            }
+    // const mySQLConnection = getMySQLConnection();
+    // mySQLConnection.query(
+    //     sqlQuery,
+    //     (
+    //         err,
+    //         // TODO: how to type rows?
+    //         rows,
+    //         fields
+    //     ) => {
+    //         if (err) {
+    //             console.log(
+    //                 "Failed to query for " + __filename.slice(__filename.lastIndexOf(path.sep) + 1) + ": " + err
+    //             );
+    //             res.status(400).send({ error: err.sqlMessage, sql: err.sql }).end();
+    //             return;
+    //         }
 
-            if (returnSqlQuery) {
-                res.status(200).send(sqlQuery).end();
-                return;
-            }
+    //         if (returnSqlQuery) {
+    //             res.status(200).send(sqlQuery).end();
+    //             return;
+    //         }
 
-            const response = formatResponse(rows, {
-                offset,
-                limit,
-                year,
-                round,
-                constructor,
-                circuit,
-                driver,
-                grid,
-                result,
-                fastest,
-                status,
-            });
+    //         const response = formatResponse(rows, {
+    //             offset,
+    //             limit,
+    //             year,
+    //             round,
+    //             constructor,
+    //             circuit,
+    //             driver,
+    //             grid,
+    //             result,
+    //             fastest,
+    //             status,
+    //         });
 
-            res.json(response);
-        }
-    );
+    //         res.json(response);
+    //     }
+    // );
+
+    const circuits = await prisma.circuits.findMany({
+        take: limit,
+        orderBy: {
+            circuitRef: "asc",
+        },
+    });
+
+    res.json(formatCircuits(circuits));
 }
