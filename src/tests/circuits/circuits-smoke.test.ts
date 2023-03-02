@@ -32,7 +32,7 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body.MRData.CircuitTable.Circuits).toEqual(bottas);
+        expect(response.body).toEqual(bottas);
     });
 
     test("alonso-mclaren", async () => {
@@ -43,7 +43,7 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body.MRData.CircuitTable.Circuits).toEqual(alonsoMclaren);
+        expect(response.body).toEqual(alonsoMclaren);
     });
 
     test("hamilton-2020", async () => {
@@ -54,7 +54,7 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body.MRData.CircuitTable.Circuits).toEqual(hamilton2022);
+        expect(response.body).toEqual(hamilton2022);
     });
 
     test("maldonado-collision", async () => {
@@ -65,7 +65,7 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body.MRData.CircuitTable.Circuits).toEqual(maldonadoCollision);
+        expect(response.body).toEqual(maldonadoCollision);
     });
 
     test("vettel-wins-ferrari", async () => {
@@ -77,6 +77,6 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body.MRData.CircuitTable.Circuits).toEqual(vettelWinsFerrari);
+        expect(response.body).toEqual(vettelWinsFerrari);
     });
 });

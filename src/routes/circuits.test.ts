@@ -25,7 +25,7 @@ describe("GET /circuits", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body.MRData.CircuitTable.Circuits).toEqual([
+        expect(response.body).toEqual([
             {
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
@@ -49,7 +49,7 @@ describe("GET /circuits", () => {
 
     testLimitQueryParameter(endpoint);
 
-    testOffsetQueryParameter(endpoint, (response) => response.body.MRData.CircuitTable.Circuits, {
+    testOffsetQueryParameter(endpoint, (response) => response.body, {
         "0": {
             Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
             circuitId: "adelaide",
@@ -120,8 +120,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
@@ -136,7 +136,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body).toEqual([]);
         });
 
         it("returns circuits from correct year", async () => {
@@ -146,8 +146,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(22);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(22);
+            expect(response.body[0]).toEqual({
                 Location: {
                     alt: "10",
                     country: "Australia",
@@ -185,9 +185,7 @@ describe("GET /circuits", () => {
             const response = await request(app).get(url);
             const currentYearResponse = await request(app).get(currentYearUrl);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual(
-                currentYearResponse.body.MRData.CircuitTable.Circuits
-            );
+            expect(response.body).toEqual(currentYearResponse.body.MRData.CircuitTable.Circuits);
         });
     });
 
@@ -199,8 +197,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
@@ -215,7 +213,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body).toEqual([]);
         });
 
         it("returns circuits where the constructor has competed", async () => {
@@ -225,9 +223,9 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(1);
+            expect(response.body.length).toBe(1);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([
+            expect(response.body).toEqual([
                 {
                     Location: { alt: "88", country: "France", lat: "49.2542", locality: "Reims", long: "3.93083" },
                     circuitId: "reims",
@@ -260,8 +258,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
@@ -276,7 +274,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body).toEqual([]);
         });
 
         it("returns 1 circuit when circuit is defined", async () => {
@@ -286,9 +284,9 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(1);
+            expect(response.body.length).toBe(1);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([
+            expect(response.body).toEqual([
                 {
                     circuitId: "monza",
                     url: "http://en.wikipedia.org/wiki/Autodromo_Nazionale_Monza",
@@ -326,8 +324,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
@@ -342,7 +340,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body).toEqual([]);
         });
 
         it("returns circuits where the driver has competed", async () => {
@@ -352,8 +350,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(1);
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([
+            expect(response.body.length).toBe(1);
+            expect(response.body).toEqual([
                 {
                     circuitId: "indianapolis",
                     url: "http://en.wikipedia.org/wiki/Indianapolis_Motor_Speedway",
@@ -392,8 +390,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
@@ -408,7 +406,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body).toEqual([]);
         });
 
         it("returns circuits which contains the grid position", async () => {
@@ -418,8 +416,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(7);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(7);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "20", country: "UK", lat: "53.4769", locality: "Liverpool", long: "-2.94056" },
                 circuitId: "aintree",
                 circuitName: "Aintree",
@@ -449,8 +447,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
@@ -465,7 +463,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body).toEqual([]);
         });
 
         it("returns circuits which have had the defined result", async () => {
@@ -475,8 +473,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(1);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(1);
+            expect(response.body[0]).toEqual({
                 circuitId: "indianapolis",
                 url: "http://en.wikipedia.org/wiki/Indianapolis_Motor_Speedway",
                 circuitName: "Indianapolis Motor Speedway",
@@ -513,8 +511,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
@@ -529,7 +527,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body).toEqual([]);
         });
 
         it("returns circuits which TODO:", async () => {
@@ -539,8 +537,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(18);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(18);
+            expect(response.body[0]).toEqual({
                 circuitId: "americas",
                 url: "http://en.wikipedia.org/wiki/Circuit_of_the_Americas",
                 circuitName: "Circuit of the Americas",
@@ -577,8 +575,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
@@ -593,7 +591,7 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits).toEqual([]);
+            expect(response.body).toEqual([]);
         });
 
         it("returns circuits which TODO:", async () => {
@@ -603,8 +601,8 @@ describe("GET /circuits", () => {
 
             const response = await request(app).get(url);
 
-            expect(response.body.MRData.CircuitTable.Circuits.length).toBe(30);
-            expect(response.body.MRData.CircuitTable.Circuits[0]).toEqual({
+            expect(response.body.length).toBe(30);
+            expect(response.body[0]).toEqual({
                 Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
                 circuitId: "adelaide",
                 circuitName: "Adelaide Street Circuit",
