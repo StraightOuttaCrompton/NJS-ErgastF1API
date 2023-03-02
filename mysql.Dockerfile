@@ -1,4 +1,4 @@
-FROM mariadb/server:latest
+FROM mariadb:latest
 
 RUN apt-get update && apt-get install -y wget && apt-get clean
 

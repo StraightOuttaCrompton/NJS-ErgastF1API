@@ -185,7 +185,7 @@ describe("GET /circuits", () => {
             const response = await request(app).get(url);
             const currentYearResponse = await request(app).get(currentYearUrl);
 
-            expect(response.body).toEqual(currentYearResponse.body.MRData.CircuitTable.Circuits);
+            expect(response.body).toEqual(currentYearResponse.body);
         });
     });
 

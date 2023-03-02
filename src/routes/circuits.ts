@@ -157,15 +157,12 @@ function parseParams(req: Request, res: Response) {
     const offset = parseParamAsInt(offsetParam, DEFAULT_OFFSET);
     const limit = parseParamAsInt(limitParam, DEFAULT_LIMIT);
 
-    const year: string | undefined = (() => {
-        if (typeof yearParam !== "string") {
-            return undefined;
+    const year: number | undefined = (() => {
+        if (yearParam === "current") {
+            return new Date().getFullYear();
         }
 
-        if (yearParam === "current") {
-            return new Date().getFullYear().toString();
-        }
-        return yearParam;
+        return parseParamAsInt(yearParam, undefined);
     })();
 
     const round = parseParamAsString(roundParam, undefined);
@@ -364,6 +361,19 @@ export async function getCircuits(req: Request, res: Response) {
         skip: offset,
         orderBy: {
             circuitRef: "asc",
+        },
+
+        where: {
+            races: {
+                some: {
+                    year: year
+                        ? {
+                              // TODO: allow for multiple years to be queried by passing years array here
+                              in: [year],
+                          }
+                        : undefined,
+                },
+            },
         },
     });
 
