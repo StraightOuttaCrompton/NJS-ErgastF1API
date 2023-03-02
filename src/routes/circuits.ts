@@ -378,6 +378,17 @@ export async function getCircuits(req: Request, res: Response) {
                               in: [round],
                           }
                         : undefined,
+
+                    constructorResults: {
+                        some: {
+                            // TODO: why do I need this ignore?
+                            // @ts-ignore
+                            constructor: {
+                                // TODO: allow multiple
+                                constructorRef: constructor,
+                            },
+                        },
+                    },
                 },
             },
         },
