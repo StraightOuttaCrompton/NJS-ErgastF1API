@@ -165,7 +165,7 @@ function parseParams(req: Request, res: Response) {
         return parseParamAsInt(yearParam, undefined);
     })();
 
-    const round = parseParamAsString(roundParam, undefined);
+    const round = parseParamAsInt(roundParam, undefined);
     const constructor = parseParamAsString(
         // @ts-ignore
         constructorParam,
@@ -370,6 +370,12 @@ export async function getCircuits(req: Request, res: Response) {
                         ? {
                               // TODO: allow for multiple years to be queried by passing years array here
                               in: [year],
+                          }
+                        : undefined,
+                    round: round
+                        ? {
+                              // TODO: allow for multiple rounds to be queried by passing rounds array here
+                              in: [round],
                           }
                         : undefined,
                 },
