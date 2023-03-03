@@ -84,7 +84,9 @@ model results {
   rank            Int?    @default(0)
   fastestLapTime  String? @db.VarChar(255)
   fastestLapSpeed String? @db.VarChar(255)
-  statusId        Int     @default(0)
+
+  statusId Int    @default(0)
+  status   status @relation(fields: [statusId], references: [statusId])
 }
 
 model constructorResults {
@@ -199,6 +201,7 @@ model sprintResults {
 }
 
 model status {
-  statusId Int    @id @default(autoincrement())
-  status   String @default("") @db.VarChar(255)
+  statusId Int       @id @default(autoincrement())
+  status   String    @default("") @db.VarChar(255)
+  results  results[]
 }
