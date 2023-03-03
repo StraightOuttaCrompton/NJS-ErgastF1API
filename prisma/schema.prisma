@@ -17,7 +17,8 @@ model circuits {
   lng        Float?  @db.Float
   alt        Int?
   url        String  @unique(map: "url") @default("") @db.VarChar(255)
-  races      races[]
+
+  races races[]
 }
 
 model races {
@@ -64,7 +65,8 @@ model results {
   raceId Int   @default(0)
   race   races @relation(fields: [raceId], references: [raceId])
 
-  driverId Int @default(0)
+  driverId Int     @default(0)
+  driver   drivers @relation(fields: [driverId], references: [driverId])
 
   constructorId Int          @default(0)
   constructor   constructors @relation(fields: [constructorId], references: [constructorId])
@@ -128,6 +130,8 @@ model drivers {
   dob         DateTime? @db.Date
   nationality String?   @db.VarChar(255)
   url         String    @unique(map: "url") @default("") @db.VarChar(255)
+
+  results results[]
 }
 
 model lapTimes {

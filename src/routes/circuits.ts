@@ -261,6 +261,14 @@ export async function getCircuits(req: Request, res: Response) {
                           }
                         : undefined,
 
+                    results: {
+                        some: {
+                            driver: {
+                                driverRef: driver,
+                            },
+                        },
+                    },
+
                     constructorResults: {
                         some: {
                             // TODO: why do I need this ignore?
