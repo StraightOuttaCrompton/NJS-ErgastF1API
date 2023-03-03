@@ -57,10 +57,6 @@ function parseParamAsString<T = string | undefined>(param: Request["query"][keyo
     return param;
 }
 
-function parseSqlParam(param: Request["query"][keyof Request["query"]]) {
-    return param === "true";
-}
-
 function parseParams(req: Request, res: Response) {
     const {
         offset: offsetParam,
@@ -75,7 +71,6 @@ function parseParams(req: Request, res: Response) {
         status: statusParam,
         driverStandings: driverStandingsParam,
         constructorStandings: constructorStandingsParam,
-        sql: sqlParam,
         ...rest
     } = req.query;
 
@@ -114,8 +109,6 @@ function parseParams(req: Request, res: Response) {
     const fastest = parseParamAsString(fastestParam, undefined);
     const status = parseParamAsString(statusParam, undefined);
 
-    const returnSqlQuery = parseSqlParam(sqlParam);
-
     return {
         offset,
         limit,
@@ -129,7 +122,6 @@ function parseParams(req: Request, res: Response) {
         status,
         driverStandings,
         constructorStandings,
-        returnSqlQuery,
     };
 }
 
@@ -236,7 +228,7 @@ export async function getCircuits(req: Request, res: Response) {
     // if (round) sqlQuery += ` AND races.round='${round}'`;
     // sqlQuery += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
 
-    const { offset, limit, year, round, constructor, driver, grid, result, fastest, status, returnSqlQuery } = params;
+    const { offset, limit, year, round, constructor, driver, grid, result, fastest, status } = params;
 
     const circuits = await prisma.circuits.findMany({
         take: limit,
