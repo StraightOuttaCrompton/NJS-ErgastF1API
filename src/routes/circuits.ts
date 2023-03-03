@@ -107,7 +107,7 @@ function parseParams(req: Request, res: Response) {
     const grid = parseParamAsString(gridParam, undefined);
     const result = parseParamAsString(resultParam, undefined);
     const fastest = parseParamAsString(fastestParam, undefined);
-    const status = parseParamAsString(statusParam, undefined);
+    const status = parseParamAsInt(statusParam, undefined);
 
     return {
         offset,
@@ -258,6 +258,7 @@ export async function getCircuits(req: Request, res: Response) {
                             driver: {
                                 driverRef: driver,
                             },
+                            statusId: status ? { in: [status] } : undefined,
                         },
                     },
 
