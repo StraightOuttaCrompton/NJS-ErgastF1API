@@ -5,17 +5,6 @@ import path from "path";
 import { circuits, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-// interface CircuitDB {
-//     circuitRef: string;
-//     url: string;
-//     name: string;
-//     lat: number;
-//     lng: number;
-//     alt: number;
-//     location: string;
-//     country: string;
-// }
-
 interface Circuit {
     circuitId: string; // TODO: rename to id
     url: string;
@@ -44,57 +33,6 @@ function formatCircuits(rows: circuits[]): Circuit[] {
             country: row.country || "",
         },
     }));
-}
-
-function formatResponse(
-    rows: circuits[],
-    {
-        offset,
-        limit,
-        year,
-        round,
-        constructor,
-        circuit,
-        driver,
-        grid,
-        result,
-        fastest,
-        status,
-    }: {
-        offset: number;
-        limit: number;
-        year: string | undefined;
-        round: string | undefined;
-        constructor: string | undefined;
-        circuit: string | undefined;
-        driver: string | undefined;
-        grid: string | undefined;
-        result: string | undefined;
-        fastest: string | undefined;
-        status: string | undefined;
-    }
-) {
-    const json: CircuitResponse = {
-        MRData: {
-            limit: limit.toString(),
-            offset: offset.toString(),
-            CircuitTable: {
-                Circuits: formatCircuits(rows),
-            },
-        },
-    };
-
-    if (year) json.MRData.CircuitTable.season = year;
-    if (round) json.MRData.CircuitTable.round = round;
-    if (constructor) json.MRData.CircuitTable.constructorId = constructor;
-    if (circuit) json.MRData.CircuitTable.circuitId = circuit;
-    if (driver) json.MRData.CircuitTable.driverId = driver;
-    if (grid) json.MRData.CircuitTable.grid = grid;
-    if (result) json.MRData.CircuitTable.result = result;
-    if (fastest) json.MRData.CircuitTable.fastest = fastest;
-    if (status) json.MRData.CircuitTable.status = status;
-
-    return json;
 }
 
 function parseParamAsInt<T = number | undefined>(param: Request["query"][keyof Request["query"]], defaultValue: T) {
@@ -130,7 +68,6 @@ function parseParams(req: Request, res: Response) {
         year: yearParam,
         round: roundParam,
         constructor: constructorParam,
-        circuit: circuitParam,
         driver: driverParam,
         grid: gridParam,
         result: resultParam,
@@ -171,7 +108,6 @@ function parseParams(req: Request, res: Response) {
         constructorParam,
         undefined
     );
-    const circuit = parseParamAsString(circuitParam, undefined);
     const driver = parseParamAsString(driverParam, undefined);
     const grid = parseParamAsString(gridParam, undefined);
     const result = parseParamAsString(resultParam, undefined);
@@ -186,7 +122,6 @@ function parseParams(req: Request, res: Response) {
         year,
         round,
         constructor,
-        circuit,
         driver,
         grid,
         result,
@@ -196,58 +131,6 @@ function parseParams(req: Request, res: Response) {
         constructorStandings,
         returnSqlQuery,
     };
-}
-
-function getSqlQuery({
-    offset,
-    limit,
-    year,
-    round,
-    constructor,
-    circuit,
-    driver,
-    grid,
-    result,
-    fastest,
-    status,
-}: {
-    offset: number;
-    limit: number;
-    year: string | undefined;
-    round: string | undefined;
-    constructor: string | undefined;
-    circuit: string | undefined;
-    driver: string | undefined;
-    grid: string | undefined;
-    result: string | undefined;
-    fastest: string | undefined;
-    status: string | undefined;
-}) {
-    let sqlQuery =
-        "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits";
-    if (year || driver || constructor || status || grid || fastest || result) sqlQuery += ", races";
-    if (driver || constructor || status || grid || fastest || result) sqlQuery += ", results";
-    if (driver) sqlQuery += ", drivers";
-    if (constructor) sqlQuery += ", constructors";
-    sqlQuery += " WHERE TRUE";
-
-    //Set the join
-    if (year || driver || constructor || status || grid || fastest || result)
-        sqlQuery += " AND races.circuitId=circuits.circuitId";
-    if (circuit) sqlQuery += ` AND circuits.circuitRef='${circuit}'`;
-    if (driver || constructor || status || grid || fastest || result) sqlQuery += " AND results.raceId=races.raceId";
-    if (constructor)
-        sqlQuery += ` AND results.constructorId=constructors.constructorId AND constructors.constructorRef='${constructor}'`;
-    if (driver) sqlQuery += ` AND results.driverId=drivers.driverId AND drivers.driverRef='${driver}'`;
-    if (status) sqlQuery += ` AND results.statusId='${status}'`;
-    if (grid) sqlQuery += ` AND results.grid='${grid}'`;
-    if (fastest) sqlQuery += ` AND results.rank='${fastest}'`;
-    if (result) sqlQuery += ` AND results.positionText='${result}'`;
-    if (year) sqlQuery += ` AND races.year='${year}'`;
-    if (round) sqlQuery += ` AND races.round='${round}'`;
-    sqlQuery += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
-
-    return sqlQuery;
 }
 
 interface CircuitResponse {
@@ -353,8 +236,7 @@ export async function getCircuits(req: Request, res: Response) {
     // if (round) sqlQuery += ` AND races.round='${round}'`;
     // sqlQuery += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
 
-    const { offset, limit, year, round, constructor, circuit, driver, grid, result, fastest, status, returnSqlQuery } =
-        params;
+    const { offset, limit, year, round, constructor, driver, grid, result, fastest, status, returnSqlQuery } = params;
 
     const circuits = await prisma.circuits.findMany({
         take: limit,
@@ -412,4 +294,118 @@ export async function getCircuit(req: Request, res: Response) {
         return;
     }
     res.json(circuit);
+}
+
+// interface CircuitDB {
+//     circuitRef: string;
+//     url: string;
+//     name: string;
+//     lat: number;
+//     lng: number;
+//     alt: number;
+//     location: string;
+//     country: string;
+// }
+
+function getSqlQuery({
+    offset,
+    limit,
+    year,
+    round,
+    constructor,
+    circuit,
+    driver,
+    grid,
+    result,
+    fastest,
+    status,
+}: {
+    offset: number;
+    limit: number;
+    year: string | undefined;
+    round: string | undefined;
+    constructor: string | undefined;
+    circuit: string | undefined;
+    driver: string | undefined;
+    grid: string | undefined;
+    result: string | undefined;
+    fastest: string | undefined;
+    status: string | undefined;
+}) {
+    let sqlQuery =
+        "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits";
+    if (year || driver || constructor || status || grid || fastest || result) sqlQuery += ", races";
+    if (driver || constructor || status || grid || fastest || result) sqlQuery += ", results";
+    if (driver) sqlQuery += ", drivers";
+    if (constructor) sqlQuery += ", constructors";
+    sqlQuery += " WHERE TRUE";
+
+    //Set the join
+    if (year || driver || constructor || status || grid || fastest || result)
+        sqlQuery += " AND races.circuitId=circuits.circuitId";
+    if (circuit) sqlQuery += ` AND circuits.circuitRef='${circuit}'`;
+    if (driver || constructor || status || grid || fastest || result) sqlQuery += " AND results.raceId=races.raceId";
+    if (constructor)
+        sqlQuery += ` AND results.constructorId=constructors.constructorId AND constructors.constructorRef='${constructor}'`;
+    if (driver) sqlQuery += ` AND results.driverId=drivers.driverId AND drivers.driverRef='${driver}'`;
+    if (status) sqlQuery += ` AND results.statusId='${status}'`;
+    if (grid) sqlQuery += ` AND results.grid='${grid}'`;
+    if (fastest) sqlQuery += ` AND results.rank='${fastest}'`;
+    if (result) sqlQuery += ` AND results.positionText='${result}'`;
+    if (year) sqlQuery += ` AND races.year='${year}'`;
+    if (round) sqlQuery += ` AND races.round='${round}'`;
+    sqlQuery += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
+
+    return sqlQuery;
+}
+
+function formatResponse(
+    rows: circuits[],
+    {
+        offset,
+        limit,
+        year,
+        round,
+        constructor,
+        circuit,
+        driver,
+        grid,
+        result,
+        fastest,
+        status,
+    }: {
+        offset: number;
+        limit: number;
+        year: string | undefined;
+        round: string | undefined;
+        constructor: string | undefined;
+        circuit: string | undefined;
+        driver: string | undefined;
+        grid: string | undefined;
+        result: string | undefined;
+        fastest: string | undefined;
+        status: string | undefined;
+    }
+) {
+    const json: CircuitResponse = {
+        MRData: {
+            limit: limit.toString(),
+            offset: offset.toString(),
+            CircuitTable: {
+                Circuits: formatCircuits(rows),
+            },
+        },
+    };
+
+    if (year) json.MRData.CircuitTable.season = year;
+    if (round) json.MRData.CircuitTable.round = round;
+    if (constructor) json.MRData.CircuitTable.constructorId = constructor;
+    if (circuit) json.MRData.CircuitTable.circuitId = circuit;
+    if (driver) json.MRData.CircuitTable.driverId = driver;
+    if (grid) json.MRData.CircuitTable.grid = grid;
+    if (result) json.MRData.CircuitTable.result = result;
+    if (fastest) json.MRData.CircuitTable.fastest = fastest;
+    if (status) json.MRData.CircuitTable.status = status;
+
+    return json;
 }
