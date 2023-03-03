@@ -401,15 +401,11 @@ export async function getCircuit(req: Request, res: Response) {
     const { circuitRef } = req.params;
 
     if (!circuitRef) {
-        res.status(400).send("circuitRef not defined");
+        res.status(400).send("circuitId not defined");
         return;
     }
 
-    const circuit = await prisma.circuits.findFirst({
-        where: {
-            circuitRef,
-        },
-    });
+    const circuit = await prisma.circuits.findUnique({ where: { circuitRef } });
 
     if (!circuit) {
         res.status(404).send("No circuit found");

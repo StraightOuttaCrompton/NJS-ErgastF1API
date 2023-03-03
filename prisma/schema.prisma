@@ -9,7 +9,7 @@ datasource db {
 
 model circuits {
   circuitId  Int     @id @default(autoincrement())
-  circuitRef String  @default("") @db.VarChar(255)
+  circuitRef String  @unique @default("") @db.VarChar(255)
   name       String  @default("") @db.VarChar(255)
   location   String? @db.VarChar(255)
   country    String? @db.VarChar(255)
