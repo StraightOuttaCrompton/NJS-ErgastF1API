@@ -106,7 +106,7 @@ function parseParams(req: Request, res: Response) {
     const driver = parseParamAsString(driverParam, undefined);
     const grid = parseParamAsInt(gridParam, undefined);
     const result = parseParamAsString(resultParam, undefined);
-    const fastest = parseParamAsString(fastestParam, undefined);
+    const fastest = parseParamAsInt(fastestParam, undefined);
     const status = parseParamAsInt(statusParam, undefined);
 
     return {
@@ -228,7 +228,19 @@ export async function getCircuits(req: Request, res: Response) {
     // if (round) sqlQuery += ` AND races.round='${round}'`;
     // sqlQuery += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
 
-    const { offset, limit, year, round, constructor, driver, grid, result, fastest, status } = params;
+    const {
+        offset,
+        limit,
+        year,
+        round,
+        constructor,
+        driver,
+        grid,
+        result,
+
+        fastest, // TODO: rename to rank?
+        status,
+    } = params;
 
     const circuits = await prisma.circuits.findMany({
         take: limit,
@@ -261,6 +273,7 @@ export async function getCircuits(req: Request, res: Response) {
                             statusId: status ? { in: [status] } : undefined,
                             positionText: result ? { in: [result] } : undefined,
                             grid: grid ? { in: [grid] } : undefined,
+                            rank: fastest ? { in: [fastest] } : undefined,
                         },
                     },
 
