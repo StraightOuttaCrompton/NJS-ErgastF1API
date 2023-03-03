@@ -396,3 +396,24 @@ export async function getCircuits(req: Request, res: Response) {
 
     res.json(formatCircuits(circuits));
 }
+
+export async function getCircuit(req: Request, res: Response) {
+    const { circuitRef } = req.params;
+
+    if (!circuitRef) {
+        res.status(400).send("circuitRef not defined");
+        return;
+    }
+
+    const circuit = await prisma.circuits.findFirst({
+        where: {
+            circuitRef,
+        },
+    });
+
+    if (!circuit) {
+        res.status(404).send("No circuit found");
+        return;
+    }
+    res.json(circuit);
+}

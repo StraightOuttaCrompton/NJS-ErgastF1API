@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getCircuits } from "./routes/circuits";
+import { getCircuits, getCircuit } from "./routes/circuits";
 import routesDrivers from "./routes/drivers";
 import routesConsturctors from "./routes/constructors";
 import routesPitStop from "./routes/pitstops";
@@ -18,6 +18,7 @@ const app = express(); //TODO: make this configurable to limit access to known c
 
 //add Filters
 app.get("/circuits", getCircuits);
+app.get("/circuits/:circuitRef", getCircuit);
 app.use("/drivers", routesDrivers); //DONE
 app.use("/constructors", routesConsturctors); //DONE
 app.use("/pitstops", routesPitStop); //DONE
