@@ -270,23 +270,23 @@ export async function getCircuits(req: Request, res: Response) {
                             driver: {
                                 driverRef: driver,
                             },
-                            statusId: status ? { in: [status] } : undefined,
-                            positionText: result ? { in: [result] } : undefined,
-                            grid: grid ? { in: [grid] } : undefined,
-                            rank: fastest ? { in: [fastest] } : undefined,
+                            // statusId: status ? { in: [status] } : undefined,
+                            // positionText: result ? { in: [result] } : undefined,
+                            // grid: grid ? { in: [grid] } : undefined,
+                            // rank: fastest ? { in: [fastest] } : undefined,
                         },
                     },
 
-                    constructorResults: {
-                        some: {
-                            // TODO: why do I need this ignore?
-                            // @ts-ignore
-                            constructor: {
-                                // TODO: allow multiple
-                                constructorRef: constructor,
-                            },
-                        },
-                    },
+                    // constructorResults: {
+                    //     some: {
+                    //         // TODO: why do I need this ignore?
+                    //         // @ts-ignore
+                    //         constructor: {
+                    //             // TODO: allow multiple
+                    //             constructorRef: constructor,
+                    //         },
+                    //     },
+                    // },
                 },
             },
         },
