@@ -54,16 +54,16 @@ describe("circuit smoke tests", () => {
         expect(response.body).toMatchSnapshot();
     });
 
-    // test("maldonado-collision", async () => {
-    //     const url = `${endpoint}?${querystring.stringify({
-    //         driver: "maldonado",
-    //         status: 4,
-    //     })}`;
+    test("maldonado-collision", async () => {
+        const url = `${endpoint}?${querystring.stringify({
+            driver: "maldonado",
+            status: 4,
+        })}`;
 
-    //     const response = await request(app).get(url);
+        const response = await request(app).get(url);
 
-    //     expect(response.body).toEqual(maldonadoCollision);
-    // });
+        expect(response.body).toEqual(maldonadoCollision);
+    });
 
     // test("vettel-wins-ferrari", async () => {
     //     const url = `${endpoint}?${querystring.stringify({

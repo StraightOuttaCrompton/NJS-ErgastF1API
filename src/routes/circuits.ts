@@ -270,7 +270,7 @@ export async function getCircuits(req: Request, res: Response) {
                             driver: {
                                 driverRef: driver,
                             },
-                            // statusId: status ? { in: [status] } : undefined,
+                            statusId: status ? { in: [status] } : undefined,
                             // positionText: result ? { in: [result] } : undefined,
                             // grid: grid ? { in: [grid] } : undefined,
                             // rank: fastest ? { in: [fastest] } : undefined,
