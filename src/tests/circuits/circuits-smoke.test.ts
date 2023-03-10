@@ -4,8 +4,7 @@ import querystring from "querystring";
 import { pool } from "../../connection";
 
 // import alonsoMclaren from "./expectedData/alonso-mclaren.json";
-import maldonadoCollision from "./expectedData/maldonado-collision.json";
-import vettelWinsFerrari from "./expectedData/vettel-wins-ferrari.json";
+// import vettelWinsFerrari from "./expectedData/vettel-wins-ferrari.json";
 
 describe("circuit smoke tests", () => {
     const endpoint = "/circuits";
@@ -62,7 +61,7 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body).toEqual(maldonadoCollision);
+        expect(response.body).toMatchSnapshot();
     });
 
     // test("vettel-wins-ferrari", async () => {

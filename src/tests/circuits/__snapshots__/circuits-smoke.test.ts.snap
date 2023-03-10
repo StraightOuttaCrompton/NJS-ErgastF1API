@@ -998,3 +998,68 @@ exports[`circuit smoke tests hamilton-2020 1`] = `
   },
 ]
 `;
+
+exports[`circuit smoke tests maldonado-collision 1`] = `
+[
+  {
+    "Location": {
+      "alt": "785",
+      "country": "Brazil",
+      "lat": "-23.7036",
+      "locality": "São Paulo",
+      "long": "-46.6997",
+    },
+    "circuitId": "interlagos",
+    "circuitName": "Autódromo José Carlos Pace",
+    "url": "http://en.wikipedia.org/wiki/Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace",
+  },
+  {
+    "Location": {
+      "alt": "7",
+      "country": "Monaco",
+      "lat": "43.7347",
+      "locality": "Monte-Carlo",
+      "long": "7.42056",
+    },
+    "circuitId": "monaco",
+    "circuitName": "Circuit de Monaco",
+    "url": "http://en.wikipedia.org/wiki/Circuit_de_Monaco",
+  },
+  {
+    "Location": {
+      "alt": "153",
+      "country": "UK",
+      "lat": "52.0786",
+      "locality": "Silverstone",
+      "long": "-1.01694",
+    },
+    "circuitId": "silverstone",
+    "circuitName": "Silverstone Circuit",
+    "url": "http://en.wikipedia.org/wiki/Silverstone_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "401",
+      "country": "Belgium",
+      "lat": "50.4372",
+      "locality": "Spa",
+      "long": "5.97139",
+    },
+    "circuitId": "spa",
+    "circuitName": "Circuit de Spa-Francorchamps",
+    "url": "http://en.wikipedia.org/wiki/Circuit_de_Spa-Francorchamps",
+  },
+  {
+    "Location": {
+      "alt": "3",
+      "country": "UAE",
+      "lat": "24.4672",
+      "locality": "Abu Dhabi",
+      "long": "54.6031",
+    },
+    "circuitId": "yas_marina",
+    "circuitName": "Yas Marina Circuit",
+    "url": "http://en.wikipedia.org/wiki/Yas_Marina_Circuit",
+  },
+]
+`;
