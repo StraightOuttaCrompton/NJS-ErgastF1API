@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`circuit smoke tests all 1`] = `
+exports[`GET /circuits smoke tests /circuits 1`] = `
 [
   {
     "Location": {
@@ -365,7 +365,7 @@ exports[`circuit smoke tests all 1`] = `
 ]
 `;
 
-exports[`circuit smoke tests bottas 1`] = `
+exports[`GET /circuits smoke tests /circuits?driver=bottas 1`] = `
 [
   {
     "Location": {
@@ -730,7 +730,7 @@ exports[`circuit smoke tests bottas 1`] = `
 ]
 `;
 
-exports[`circuit smoke tests hamilton-2020 1`] = `
+exports[`GET /circuits smoke tests /circuits?driver=hamilton&year=2022 1`] = `
 [
   {
     "Location": {
@@ -999,7 +999,7 @@ exports[`circuit smoke tests hamilton-2020 1`] = `
 ]
 `;
 
-exports[`circuit smoke tests maldonado-collision 1`] = `
+exports[`GET /circuits smoke tests /circuits?driver=maldonado&status=4 1`] = `
 [
   {
     "Location": {

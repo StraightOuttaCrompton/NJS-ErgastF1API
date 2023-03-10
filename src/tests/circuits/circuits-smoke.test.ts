@@ -6,32 +6,42 @@ import { pool } from "../../connection";
 // import alonsoMclaren from "./expectedData/alonso-mclaren.json";
 // import vettelWinsFerrari from "./expectedData/vettel-wins-ferrari.json";
 
-describe("circuit smoke tests", () => {
+describe("GET /circuits smoke tests", () => {
     const endpoint = "/circuits";
+
+    const queries = [
+        {
+            driver: "bottas",
+        },
+        {
+            driver: "hamilton",
+            year: 2022,
+        },
+        {
+            driver: "maldonado",
+            status: 4,
+        },
+    ];
 
     afterAll(async () => {
         pool.end();
     });
 
-    test("all", async () => {
-        const url = `${endpoint}`;
+    const testCase = (url: string) => {
+        test(url, async () => {
+            const response = await request(app).get(url);
 
-        const response = await request(app).get(url);
+            expect(response.body).toMatchSnapshot();
+        });
+    };
 
-        expect(response.body).toMatchSnapshot();
+    testCase(endpoint);
+
+    queries.forEach((query) => {
+        testCase(`${endpoint}?${querystring.stringify(query)}`);
     });
 
-    test("bottas", async () => {
-        const url = `${endpoint}?${querystring.stringify({
-            driver: "bottas",
-        })}`;
-
-        const response = await request(app).get(url);
-
-        expect(response.body).toMatchSnapshot();
-    });
-
-    // test.only("alonso-mclaren", async () => {
+    // test("alonso-mclaren", async () => {
     //     const url = `${endpoint}?${querystring.stringify({
     //         driver: "alonso",
     //         constructor: "mclaren",
@@ -41,28 +51,6 @@ describe("circuit smoke tests", () => {
 
     //     expect(response.body).toEqual(alonsoMclaren);
     // });
-
-    test("hamilton-2020", async () => {
-        const url = `${endpoint}?${querystring.stringify({
-            driver: "hamilton",
-            year: 2022,
-        })}`;
-
-        const response = await request(app).get(url);
-
-        expect(response.body).toMatchSnapshot();
-    });
-
-    test("maldonado-collision", async () => {
-        const url = `${endpoint}?${querystring.stringify({
-            driver: "maldonado",
-            status: 4,
-        })}`;
-
-        const response = await request(app).get(url);
-
-        expect(response.body).toMatchSnapshot();
-    });
 
     // test("vettel-wins-ferrari", async () => {
     //     const url = `${endpoint}?${querystring.stringify({
