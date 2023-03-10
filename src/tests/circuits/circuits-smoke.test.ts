@@ -32,7 +32,7 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body).toEqual(bottas);
+        expect(response.body).toMatchSnapshot();
     });
 
     test("alonso-mclaren", async () => {
