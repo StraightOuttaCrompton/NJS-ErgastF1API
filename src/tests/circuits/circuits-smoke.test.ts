@@ -3,8 +3,6 @@ import app from "../../app";
 import querystring from "querystring";
 import { pool } from "../../connection";
 
-import all from "./expectedData/all.json";
-import bottas from "./expectedData/bottas.json";
 import alonsoMclaren from "./expectedData/alonso-mclaren.json";
 import hamilton2022 from "./expectedData/hamilton-2022.json";
 import maldonadoCollision from "./expectedData/maldonado-collision.json";
@@ -22,7 +20,7 @@ describe("circuit smoke tests", () => {
 
         const response = await request(app).get(url);
 
-        expect(response.body).toEqual(all);
+        expect(response.body).toMatchSnapshot();
     });
 
     test("bottas", async () => {
