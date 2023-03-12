@@ -1455,3 +1455,128 @@ exports[`GET /circuits smoke tests /circuits?driverId=sainz&fastest=1&year=2022 
   },
 ]
 `;
+
+exports[`GET /circuits smoke tests /circuits?driverId=vettel&constructorId=ferrari&result=1 1`] = `
+[
+  {
+    "Location": {
+      "alt": "10",
+      "country": "Australia",
+      "lat": "-37.8497",
+      "locality": "Melbourne",
+      "long": "144.968",
+    },
+    "circuitId": "albert_park",
+    "circuitName": "Albert Park Grand Prix Circuit",
+    "url": "http://en.wikipedia.org/wiki/Melbourne_Grand_Prix_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "7",
+      "country": "Bahrain",
+      "lat": "26.0325",
+      "locality": "Sakhir",
+      "long": "50.5106",
+    },
+    "circuitId": "bahrain",
+    "circuitName": "Bahrain International Circuit",
+    "url": "http://en.wikipedia.org/wiki/Bahrain_International_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "264",
+      "country": "Hungary",
+      "lat": "47.5789",
+      "locality": "Budapest",
+      "long": "19.2486",
+    },
+    "circuitId": "hungaroring",
+    "circuitName": "Hungaroring",
+    "url": "http://en.wikipedia.org/wiki/Hungaroring",
+  },
+  {
+    "Location": {
+      "alt": "785",
+      "country": "Brazil",
+      "lat": "-23.7036",
+      "locality": "São Paulo",
+      "long": "-46.6997",
+    },
+    "circuitId": "interlagos",
+    "circuitName": "Autódromo José Carlos Pace",
+    "url": "http://en.wikipedia.org/wiki/Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace",
+  },
+  {
+    "Location": {
+      "alt": "18",
+      "country": "Singapore",
+      "lat": "1.2914",
+      "locality": "Marina Bay",
+      "long": "103.864",
+    },
+    "circuitId": "marina_bay",
+    "circuitName": "Marina Bay Street Circuit",
+    "url": "http://en.wikipedia.org/wiki/Marina_Bay_Street_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "7",
+      "country": "Monaco",
+      "lat": "43.7347",
+      "locality": "Monte-Carlo",
+      "long": "7.42056",
+    },
+    "circuitId": "monaco",
+    "circuitName": "Circuit de Monaco",
+    "url": "http://en.wikipedia.org/wiki/Circuit_de_Monaco",
+  },
+  {
+    "Location": {
+      "alt": "18",
+      "country": "Malaysia",
+      "lat": "2.76083",
+      "locality": "Kuala Lumpur",
+      "long": "101.738",
+    },
+    "circuitId": "sepang",
+    "circuitName": "Sepang International Circuit",
+    "url": "http://en.wikipedia.org/wiki/Sepang_International_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "153",
+      "country": "UK",
+      "lat": "52.0786",
+      "locality": "Silverstone",
+      "long": "-1.01694",
+    },
+    "circuitId": "silverstone",
+    "circuitName": "Silverstone Circuit",
+    "url": "http://en.wikipedia.org/wiki/Silverstone_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "401",
+      "country": "Belgium",
+      "lat": "50.4372",
+      "locality": "Spa",
+      "long": "5.97139",
+    },
+    "circuitId": "spa",
+    "circuitName": "Circuit de Spa-Francorchamps",
+    "url": "http://en.wikipedia.org/wiki/Circuit_de_Spa-Francorchamps",
+  },
+  {
+    "Location": {
+      "alt": "13",
+      "country": "Canada",
+      "lat": "45.5",
+      "locality": "Montreal",
+      "long": "-73.5228",
+    },
+    "circuitId": "villeneuve",
+    "circuitName": "Circuit Gilles Villeneuve",
+    "url": "http://en.wikipedia.org/wiki/Circuit_Gilles_Villeneuve",
+  },
+]
+`;

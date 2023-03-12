@@ -4,8 +4,6 @@ import querystring from "querystring";
 import { pool } from "../../connection";
 import { CircuitsQueryParameters } from "routes/circuits";
 
-// import vettelWinsFerrari from "./expectedData/vettel-wins-ferrari.json";
-
 describe("GET /circuits smoke tests", () => {
     const endpoint = "/circuits";
 
@@ -24,6 +22,11 @@ describe("GET /circuits smoke tests", () => {
         {
             driverId: "maldonado",
             status: 4,
+        },
+        {
+            driverId: "vettel",
+            constructorId: "ferrari",
+            result: 1,
         },
         {
             driverId: "hamilton",
@@ -59,16 +62,4 @@ describe("GET /circuits smoke tests", () => {
     queries.forEach((query) => {
         testCase(`${endpoint}?${querystring.stringify(query)}`);
     });
-
-    // test("vettel-wins-ferrari", async () => {
-    //     const url = `${endpoint}?${querystring.stringify({
-    //         driverId: "vettel",
-    //         constructorId: "ferrari",
-    //         result: 1,
-    //     })}`;
-
-    //     const response = await request(app).get(url);
-
-    //     expect(response.body).toEqual(vettelWinsFerrari);
-    // });
 });
