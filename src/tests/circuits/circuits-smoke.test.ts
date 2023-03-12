@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../../app";
 import querystring from "querystring";
 import { pool } from "../../connection";
+import { CircuitsQueryParameters } from "routes/circuits";
 
 // import alonsoMclaren from "./expectedData/alonso-mclaren.json";
 // import vettelWinsFerrari from "./expectedData/vettel-wins-ferrari.json";
@@ -9,26 +10,25 @@ import { pool } from "../../connection";
 describe("GET /circuits smoke tests", () => {
     const endpoint = "/circuits";
 
-    // :Partial<CircuitsQueryParameters>[]
-    const queries = [
+    const queries: Partial<CircuitsQueryParameters>[] = [
         {
-            driver: "bottas",
+            driverId: "bottas",
         },
         {
-            driver: "hamilton",
+            driverId: "hamilton",
             year: 2022,
         },
         {
-            driver: "maldonado",
+            driverId: "maldonado",
             status: 4,
         },
         {
-            driver: "hamilton",
+            driverId: "hamilton",
             result: 2,
             year: 2022,
         },
         {
-            driver: "max_verstappen",
+            driverId: "max_verstappen",
             grid: 1,
             year: 2022,
         },

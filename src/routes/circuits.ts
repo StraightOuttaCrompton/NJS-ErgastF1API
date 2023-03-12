@@ -56,14 +56,16 @@ function parseParamAsString<T = string | undefined>(param: Request["query"][keyo
     return param;
 }
 
+export type CircuitsQueryParameters = ReturnType<typeof parseParams>;
+
 function parseParams(req: Request, res: Response) {
     const {
         offset: offsetParam,
         limit: limitParam,
         year: yearParam,
         round: roundParam,
-        constructor: constructorParam,
-        driver: driverParam,
+        constructorId: constructorIdParam,
+        driverId: driverIdParam,
         grid: gridParam,
         result: resultParam,
         fastest: fastestParam,
@@ -97,14 +99,10 @@ function parseParams(req: Request, res: Response) {
     })();
 
     const round = parseParamAsInt(roundParam, undefined);
-    const constructor = parseParamAsString(
-        // @ts-ignore
-        constructorParam,
-        undefined
-    );
-    const driver = parseParamAsString(driverParam, undefined);
+    const constructorId = parseParamAsString(constructorIdParam, undefined);
+    const driverId = parseParamAsString(driverIdParam, undefined);
     const grid = parseParamAsInt(gridParam, undefined);
-    const result = parseParamAsString(resultParam, undefined);
+    const result = parseParamAsInt(resultParam, undefined);
     const fastest = parseParamAsInt(fastestParam, undefined);
     const status = parseParamAsInt(statusParam, undefined);
 
@@ -113,8 +111,8 @@ function parseParams(req: Request, res: Response) {
         limit,
         year,
         round,
-        constructor,
-        driver,
+        constructorId,
+        driverId,
         grid,
         result,
         fastest,
@@ -159,8 +157,8 @@ export async function getCircuits(req: Request, res: Response) {
         limit,
         year,
         round,
-        constructor,
-        driver,
+        constructorId,
+        driverId,
         grid,
         result,
 
@@ -194,10 +192,10 @@ export async function getCircuits(req: Request, res: Response) {
                     results: {
                         some: {
                             driver: {
-                                driverRef: driver,
+                                driverRef: driverId,
                             },
                             statusId: status ? { in: [status] } : undefined,
-                            positionText: result ? { in: [result] } : undefined,
+                            positionText: result?.toString() ? { in: [result.toString()] } : undefined,
                             grid: grid ? { in: [grid] } : undefined,
                             // rank: fastest ? { in: [fastest] } : undefined,
                         },

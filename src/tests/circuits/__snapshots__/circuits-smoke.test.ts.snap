@@ -365,7 +365,7 @@ exports[`GET /circuits smoke tests /circuits 1`] = `
 ]
 `;
 
-exports[`GET /circuits smoke tests /circuits?driver=bottas 1`] = `
+exports[`GET /circuits smoke tests /circuits?driverId=bottas 1`] = `
 [
   {
     "Location": {
@@ -730,7 +730,7 @@ exports[`GET /circuits smoke tests /circuits?driver=bottas 1`] = `
 ]
 `;
 
-exports[`GET /circuits smoke tests /circuits?driver=hamilton&result=2&year=2022 1`] = `
+exports[`GET /circuits smoke tests /circuits?driverId=hamilton&result=2&year=2022 1`] = `
 [
   {
     "Location": {
@@ -795,7 +795,7 @@ exports[`GET /circuits smoke tests /circuits?driver=hamilton&result=2&year=2022 
 ]
 `;
 
-exports[`GET /circuits smoke tests /circuits?driver=hamilton&year=2022 1`] = `
+exports[`GET /circuits smoke tests /circuits?driverId=hamilton&year=2022 1`] = `
 [
   {
     "Location": {
@@ -1064,7 +1064,7 @@ exports[`GET /circuits smoke tests /circuits?driver=hamilton&year=2022 1`] = `
 ]
 `;
 
-exports[`GET /circuits smoke tests /circuits?driver=maldonado&status=4 1`] = `
+exports[`GET /circuits smoke tests /circuits?driverId=maldonado&status=4 1`] = `
 [
   {
     "Location": {
@@ -1129,7 +1129,7 @@ exports[`GET /circuits smoke tests /circuits?driver=maldonado&status=4 1`] = `
 ]
 `;
 
-exports[`GET /circuits smoke tests /circuits?driver=max_verstappen&grid=1&year=2022 1`] = `
+exports[`GET /circuits smoke tests /circuits?driverId=max_verstappen&grid=1&year=2022 1`] = `
 [
   {
     "Location": {
