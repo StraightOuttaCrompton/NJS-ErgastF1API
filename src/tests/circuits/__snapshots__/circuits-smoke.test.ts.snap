@@ -1128,3 +1128,92 @@ exports[`GET /circuits smoke tests /circuits?driver=maldonado&status=4 1`] = `
   },
 ]
 `;
+
+exports[`GET /circuits smoke tests /circuits?driver=max_verstappen&grid=1&year=2022 1`] = `
+[
+  {
+    "Location": {
+      "alt": "37",
+      "country": "Italy",
+      "lat": "44.3439",
+      "locality": "Imola",
+      "long": "11.7167",
+    },
+    "circuitId": "imola",
+    "circuitName": "Autodromo Enzo e Dino Ferrari",
+    "url": "http://en.wikipedia.org/wiki/Autodromo_Enzo_e_Dino_Ferrari",
+  },
+  {
+    "Location": {
+      "alt": "678",
+      "country": "Austria",
+      "lat": "47.2197",
+      "locality": "Spielberg",
+      "long": "14.7647",
+    },
+    "circuitId": "red_bull_ring",
+    "circuitName": "Red Bull Ring",
+    "url": "http://en.wikipedia.org/wiki/Red_Bull_Ring",
+  },
+  {
+    "Location": {
+      "alt": "2227",
+      "country": "Mexico",
+      "lat": "19.4042",
+      "locality": "Mexico City",
+      "long": "-99.0907",
+    },
+    "circuitId": "rodriguez",
+    "circuitName": "Autódromo Hermanos Rodríguez",
+    "url": "http://en.wikipedia.org/wiki/Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez",
+  },
+  {
+    "Location": {
+      "alt": "45",
+      "country": "Japan",
+      "lat": "34.8431",
+      "locality": "Suzuka",
+      "long": "136.541",
+    },
+    "circuitId": "suzuka",
+    "circuitName": "Suzuka Circuit",
+    "url": "http://en.wikipedia.org/wiki/Suzuka_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "13",
+      "country": "Canada",
+      "lat": "45.5",
+      "locality": "Montreal",
+      "long": "-73.5228",
+    },
+    "circuitId": "villeneuve",
+    "circuitName": "Circuit Gilles Villeneuve",
+    "url": "http://en.wikipedia.org/wiki/Circuit_Gilles_Villeneuve",
+  },
+  {
+    "Location": {
+      "alt": "3",
+      "country": "UAE",
+      "lat": "24.4672",
+      "locality": "Abu Dhabi",
+      "long": "54.6031",
+    },
+    "circuitId": "yas_marina",
+    "circuitName": "Yas Marina Circuit",
+    "url": "http://en.wikipedia.org/wiki/Yas_Marina_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "6",
+      "country": "Netherlands",
+      "lat": "52.3888",
+      "locality": "Zandvoort",
+      "long": "4.54092",
+    },
+    "circuitId": "zandvoort",
+    "circuitName": "Circuit Park Zandvoort",
+    "url": "http://en.wikipedia.org/wiki/Circuit_Zandvoort",
+  },
+]
+`;
