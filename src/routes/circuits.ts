@@ -178,13 +178,13 @@ export async function getCircuits(req: Request, res: Response) {
                 some: {
                     year: year
                         ? {
-                              // TODO: allow for multiple years to be queried by passing years array here
+                              // TODO: allow for multiple
                               in: [year],
                           }
                         : undefined,
                     round: round
                         ? {
-                              // TODO: allow for multiple rounds to be queried by passing rounds array here
+                              // TODO: allow for multiple
                               in: [round],
                           }
                         : undefined,
@@ -194,10 +194,30 @@ export async function getCircuits(req: Request, res: Response) {
                             driver: {
                                 driverRef: driverId,
                             },
-                            statusId: status ? { in: [status] } : undefined,
-                            positionText: result?.toString() ? { in: [result.toString()] } : undefined,
-                            grid: grid ? { in: [grid] } : undefined,
-                            rank: fastest ? { in: [fastest] } : undefined,
+                            statusId: status
+                                ? {
+                                      // TODO: allow for multiple
+                                      in: [status],
+                                  }
+                                : undefined,
+                            positionText: result?.toString()
+                                ? {
+                                      // TODO: allow for multiple
+                                      in: [result.toString()],
+                                  }
+                                : undefined,
+                            grid: grid
+                                ? {
+                                      // TODO: allow for multiple
+                                      in: [grid],
+                                  }
+                                : undefined,
+                            rank: fastest
+                                ? {
+                                      // TODO: allow for multiple
+                                      in: [fastest],
+                                  }
+                                : undefined,
                         },
                     },
 
