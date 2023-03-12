@@ -1,0 +1,49 @@
+[
+    {
+        "circuitId": "imola",
+        "url": "http://en.wikipedia.org/wiki/Autodromo_Enzo_e_Dino_Ferrari",
+        "circuitName": "Autodromo Enzo e Dino Ferrari",
+        "Location": { "lat": "44.3439", "long": "11.7167", "locality": "Imola", "country": "Italy" }
+    },
+    {
+        "circuitId": "red_bull_ring",
+        "url": "http://en.wikipedia.org/wiki/Red_Bull_Ring",
+        "circuitName": "Red Bull Ring",
+        "Location": { "lat": "47.2197", "long": "14.7647", "locality": "Spielberg", "country": "Austria" }
+    },
+    {
+        "circuitId": "rodriguez",
+        "url": "http://en.wikipedia.org/wiki/Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez",
+        "circuitName": "Autódromo Hermanos Rodríguez",
+        "Location": { "lat": "19.4042", "long": "-99.0907", "locality": "Mexico City", "country": "Mexico" }
+    },
+    {
+        "circuitId": "suzuka",
+        "url": "http://en.wikipedia.org/wiki/Suzuka_Circuit",
+        "circuitName": "Suzuka Circuit",
+        "Location": { "lat": "34.8431", "long": "136.541", "locality": "Suzuka", "country": "Japan" }
+    },
+    {
+        "circuitId": "villeneuve",
+        "url": "http://en.wikipedia.org/wiki/Circuit_Gilles_Villeneuve",
+        "circuitName": "Circuit Gilles Villeneuve",
+        "Location": { "lat": "45.5", "long": "-73.5228", "locality": "Montreal", "country": "Canada" }
+    },
+    {
+        "circuitId": "yas_marina",
+        "url": "http://en.wikipedia.org/wiki/Yas_Marina_Circuit",
+        "circuitName": "Yas Marina Circuit",
+        "Location": { "lat": "24.4672", "long": "54.6031", "locality": "Abu Dhabi", "country": "UAE" }
+    },
+    {
+        "circuitId": "zandvoort",
+        "url": "http://en.wikipedia.org/wiki/Circuit_Zandvoort",
+        "circuitName": "Circuit Park Zandvoort",
+        "Location": {
+            "lat": "52.3888",
+            "long": "4.54092",
+            "locality": "Zandvoort",
+            "country": "Netherlands"
+        }
+    }
+]
