@@ -730,6 +730,71 @@ exports[`GET /circuits smoke tests /circuits?driver=bottas 1`] = `
 ]
 `;
 
+exports[`GET /circuits smoke tests /circuits?driver=hamilton&result=2&year=2022 1`] = `
+[
+  {
+    "Location": {
+      "alt": "161",
+      "country": "USA",
+      "lat": "30.1328",
+      "locality": "Austin",
+      "long": "-97.6411",
+    },
+    "circuitId": "americas",
+    "circuitName": "Circuit of the Americas",
+    "url": "http://en.wikipedia.org/wiki/Circuit_of_the_Americas",
+  },
+  {
+    "Location": {
+      "alt": "264",
+      "country": "Hungary",
+      "lat": "47.5789",
+      "locality": "Budapest",
+      "long": "19.2486",
+    },
+    "circuitId": "hungaroring",
+    "circuitName": "Hungaroring",
+    "url": "http://en.wikipedia.org/wiki/Hungaroring",
+  },
+  {
+    "Location": {
+      "alt": "785",
+      "country": "Brazil",
+      "lat": "-23.7036",
+      "locality": "São Paulo",
+      "long": "-46.6997",
+    },
+    "circuitId": "interlagos",
+    "circuitName": "Autódromo José Carlos Pace",
+    "url": "http://en.wikipedia.org/wiki/Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace",
+  },
+  {
+    "Location": {
+      "alt": "432",
+      "country": "France",
+      "lat": "43.2506",
+      "locality": "Le Castellet",
+      "long": "5.79167",
+    },
+    "circuitId": "ricard",
+    "circuitName": "Circuit Paul Ricard",
+    "url": "http://en.wikipedia.org/wiki/Paul_Ricard_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "2227",
+      "country": "Mexico",
+      "lat": "19.4042",
+      "locality": "Mexico City",
+      "long": "-99.0907",
+    },
+    "circuitId": "rodriguez",
+    "circuitName": "Autódromo Hermanos Rodríguez",
+    "url": "http://en.wikipedia.org/wiki/Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez",
+  },
+]
+`;
+
 exports[`GET /circuits smoke tests /circuits?driver=hamilton&year=2022 1`] = `
 [
   {

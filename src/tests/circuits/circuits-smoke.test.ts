@@ -21,6 +21,11 @@ describe("GET /circuits smoke tests", () => {
             driver: "maldonado",
             status: 4,
         },
+        {
+            driver: "hamilton",
+            result: 2,
+            year: 2022,
+        },
     ];
 
     afterAll(async () => {
