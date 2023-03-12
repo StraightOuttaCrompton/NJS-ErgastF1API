@@ -11,6 +11,8 @@ Conversion of the ergast.com API from PHP to nodeJS
 -   cd into the root folder and run: `docker compose up`
 -   give everything a minute or to to come up and then test the API at: `http://localhost:8080/`
 
+Run `docker-compose build --no-cache && docker-compose up` to update the database
+
 ## Test
 
 ### After verifying that everything works, here's what you can try to add after the base URL
