@@ -18,8 +18,8 @@ interface Circuit {
     };
 }
 
-function formatCircuits(rows: circuits[]): Circuit[] {
-    return rows.map((row) => ({
+function formatCircuit(row: circuits): Circuit {
+    return {
         circuitId: row.circuitRef,
         url: row.url,
         circuitName: row.name,
@@ -31,7 +31,11 @@ function formatCircuits(rows: circuits[]): Circuit[] {
             locality: row.location || "",
             country: row.country || "",
         },
-    }));
+    };
+}
+
+function formatCircuits(rows: circuits[]): Circuit[] {
+    return rows.map(formatCircuit);
 }
 
 function parseParamAsInt<T = number | undefined>(param: Request["query"][keyof Request["query"]], defaultValue: T) {
@@ -231,5 +235,5 @@ export async function getCircuit(req: Request, res: Response) {
         res.status(404).send("No circuit found");
         return;
     }
-    res.json(circuit);
+    res.json(formatCircuit(circuit));
 }

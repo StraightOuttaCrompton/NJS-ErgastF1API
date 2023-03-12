@@ -70,11 +70,6 @@ describe("GET /circuits", () => {
         },
     });
 
-    testSqlQueryParameter(
-        endpoint,
-        "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits WHERE TRUE ORDER BY circuits.circuitRef LIMIT 0, 30"
-    );
-
     describe("driverStandings", () => {
         it(`does not support 'driverStandings' query parameter`, async () => {
             const url = `${endpoint}?${querystring.stringify({
@@ -100,17 +95,17 @@ describe("GET /circuits", () => {
     });
 
     // TODO: round seems to fuck up
-    // describe("round", () => {
-    //     it(`does not support 'round' query parameter`, async () => {
-    //         const url = `${endpoint}?${querystring.stringify({
-    //             round: 0,
-    //         })}`;
+    describe("round", () => {
+        it(`does not support 'round' query parameter`, async () => {
+            const url = `${endpoint}?${querystring.stringify({
+                round: 0,
+            })}`;
 
-    //         const response = await request(app).get(url);
+            const response = await request(app).get(url);
 
-    //         expect(response.statusCode).toBe(400);
-    //     });
-    // });
+            expect(response.statusCode).toBe(400);
+        });
+    });
 
     describe("year", () => {
         it("returns all circuits if year is undefined", async () => {
@@ -159,19 +154,6 @@ describe("GET /circuits", () => {
                 circuitName: "Albert Park Grand Prix Circuit",
                 url: "http://en.wikipedia.org/wiki/Melbourne_Grand_Prix_Circuit",
             });
-        });
-
-        it("returns correct sql", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                year: 2022,
-                sql: true,
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races WHERE TRUE AND races.circuitId=circuits.circuitId AND races.year='2022' ORDER BY circuits.circuitRef LIMIT 0, 30"
-            );
         });
 
         it("returns circuits from current year if year is 'current'", async () => {
@@ -234,86 +216,6 @@ describe("GET /circuits", () => {
                 },
             ]);
         });
-
-        it("returns correct sql", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                constructor: "mclaren",
-                sql: true,
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results, constructors WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.constructorId=constructors.constructorId AND constructors.constructorRef='mclaren' ORDER BY circuits.circuitRef LIMIT 0, 30"
-            );
-        });
-    });
-
-    // TODO: make a path param - /circuits/monza
-    describe("circuit", () => {
-        it("returns all circuits if circuit is undefined", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                circuit: undefined,
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.body.length).toBe(30);
-            expect(response.body[0]).toEqual({
-                Location: { alt: "58", country: "Australia", lat: "-34.9272", locality: "Adelaide", long: "138.617" },
-                circuitId: "adelaide",
-                circuitName: "Adelaide Street Circuit",
-                url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
-            });
-        });
-
-        it("returns no circuits if circuit is invalid", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                circuit: "supercooltrack",
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.body).toEqual([]);
-        });
-
-        it("returns 1 circuit when circuit is defined", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                circuit: "monza",
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.body.length).toBe(1);
-
-            expect(response.body).toEqual([
-                {
-                    circuitId: "monza",
-                    url: "http://en.wikipedia.org/wiki/Autodromo_Nazionale_Monza",
-                    circuitName: "Autodromo Nazionale di Monza",
-                    Location: {
-                        lat: "45.6156",
-                        long: "9.28111",
-                        alt: "162",
-                        locality: "Monza",
-                        country: "Italy",
-                    },
-                },
-            ]);
-        });
-
-        it("returns correct sql", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                circuit: "monza",
-                sql: true,
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits WHERE TRUE AND circuits.circuitRef='monza' ORDER BY circuits.circuitRef LIMIT 0, 30"
-            );
-        });
     });
 
     describe("driver", () => {
@@ -366,22 +268,8 @@ describe("GET /circuits", () => {
                 },
             ]);
         });
-
-        it("returns correct sql", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                driver: "hamilton",
-                sql: true,
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results, drivers WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.driverId=drivers.driverId AND drivers.driverRef='hamilton' ORDER BY circuits.circuitRef LIMIT 0, 30"
-            );
-        });
     });
 
-    // TODO: should this be a separate endpoint?
     describe("grid", () => {
         it("returns all circuits if grid is undefined", async () => {
             const url = `${endpoint}?${querystring.stringify({
@@ -423,19 +311,6 @@ describe("GET /circuits", () => {
                 circuitName: "Aintree",
                 url: "http://en.wikipedia.org/wiki/Aintree_Motor_Racing_Circuit",
             });
-        });
-
-        it("returns correct sql", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                grid: 30,
-                sql: true,
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.grid='30' ORDER BY circuits.circuitRef LIMIT 0, 30"
-            );
         });
     });
 
@@ -486,19 +361,6 @@ describe("GET /circuits", () => {
                     country: "USA",
                 },
             });
-        });
-
-        it("returns correct sql", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                result: 30,
-                sql: true,
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.positionText='30' ORDER BY circuits.circuitRef LIMIT 0, 30"
-            );
         });
     });
 
@@ -551,19 +413,6 @@ describe("GET /circuits", () => {
                 },
             });
         });
-
-        it("returns correct sql", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                fastest: 30,
-                sql: true,
-            })}`;
-
-            const response = await request(app).get(url);
-
-            expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.rank='30' ORDER BY circuits.circuitRef LIMIT 0, 30"
-            );
-        });
     });
 
     // TODO: what does this even mean in this context?
@@ -609,18 +458,32 @@ describe("GET /circuits", () => {
                 url: "http://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
             });
         });
+    });
+});
 
-        it("returns correct sql", async () => {
-            const url = `${endpoint}?${querystring.stringify({
-                status: 1,
-                sql: true,
-            })}`;
+describe("GET /circuits/{circuitId}", () => {
+    const endpoint = "/circuits";
 
-            const response = await request(app).get(url);
+    it("returns no circuits if circuit is invalid", async () => {
+        const circuit = "supercooltrack";
+        const url = `${endpoint}/${circuit}`;
 
-            expect(response.text).toBe(
-                "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits, races, results WHERE TRUE AND races.circuitId=circuits.circuitId AND results.raceId=races.raceId AND results.statusId='1' ORDER BY circuits.circuitRef LIMIT 0, 30"
-            );
+        const response = await request(app).get(url);
+
+        expect(response.body).toEqual({});
+    });
+
+    it("returns 1 circuit when circuit is defined", async () => {
+        const circuit = "monza";
+        const url = `${endpoint}/${circuit}`;
+
+        const response = await request(app).get(url);
+
+        expect(response.body).toEqual({
+            circuitId: "monza",
+            url: "http://en.wikipedia.org/wiki/Autodromo_Nazionale_Monza",
+            circuitName: "Autodromo Nazionale di Monza",
+            Location: { lat: "45.6156", long: "9.28111", alt: "162", locality: "Monza", country: "Italy" },
         });
     });
 });
