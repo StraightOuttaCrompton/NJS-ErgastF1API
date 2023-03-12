@@ -3,6 +3,7 @@ import app from "../../app";
 import querystring from "querystring";
 import { pool } from "../../connection";
 
+import maxVerstappenPoles2022 from "./expectedData/max_verstappen_poles_2022.json";
 // import alonsoMclaren from "./expectedData/alonso-mclaren.json";
 // import vettelWinsFerrari from "./expectedData/vettel-wins-ferrari.json";
 
@@ -24,6 +25,11 @@ describe("GET /circuits smoke tests", () => {
         {
             driver: "hamilton",
             result: 2,
+            year: 2022,
+        },
+        {
+            driver: "max_verstappen",
+            grid: 1,
             year: 2022,
         },
     ];
