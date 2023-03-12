@@ -128,40 +128,16 @@ export async function getCircuits(req: Request, res: Response) {
         return;
     }
 
-    // let sqlQuery =
-    //     "SELECT DISTINCT circuits.circuitRef, circuits.name, circuits.location, circuits.country, circuits.lat, circuits.lng, circuits.alt, circuits.url FROM circuits";
-    // if (year || driver || constructor || status || grid || fastest || result) sqlQuery += ", races";
-    // if (driver || constructor || status || grid || fastest || result) sqlQuery += ", results";
-    // if (driver) sqlQuery += ", drivers";
-    // if (constructor) sqlQuery += ", constructors";
-    // sqlQuery += " WHERE TRUE";
-
-    // //Set the join
-    // if (year || driver || constructor || status || grid || fastest || result)
-    //     sqlQuery += " AND races.circuitId=circuits.circuitId";
-    // if (circuit) sqlQuery += ` AND circuits.circuitRef='${circuit}'`;
-    // if (driver || constructor || status || grid || fastest || result) sqlQuery += " AND results.raceId=races.raceId";
-    // if (constructor)
-    //     sqlQuery += ` AND results.constructorId=constructors.constructorId AND constructors.constructorRef='${constructor}'`;
-    // if (driver) sqlQuery += ` AND results.driverId=drivers.driverId AND drivers.driverRef='${driver}'`;
-    // if (status) sqlQuery += ` AND results.statusId='${status}'`;
-    // if (grid) sqlQuery += ` AND results.grid='${grid}'`;
-    // if (fastest) sqlQuery += ` AND results.rank='${fastest}'`;
-    // if (result) sqlQuery += ` AND results.positionText='${result}'`;
-    // if (year) sqlQuery += ` AND races.year='${year}'`;
-    // if (round) sqlQuery += ` AND races.round='${round}'`;
-    // sqlQuery += ` ORDER BY circuits.circuitRef LIMIT ${offset}, ${limit}`;
-
     const {
         offset,
         limit,
+
         year,
         round,
         constructorId,
         driverId,
         grid,
         result,
-
         fastest, // TODO: rename to rank?
         status,
     } = params;
