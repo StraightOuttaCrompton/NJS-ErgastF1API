@@ -1580,3 +1580,20 @@ exports[`GET /circuits smoke tests /circuits?driverId=vettel&constructorId=ferra
   },
 ]
 `;
+
+exports[`GET /circuits smoke tests /circuits?year=2010&round=2 1`] = `
+[
+  {
+    "Location": {
+      "alt": "10",
+      "country": "Australia",
+      "lat": "-37.8497",
+      "locality": "Melbourne",
+      "long": "144.968",
+    },
+    "circuitId": "albert_park",
+    "circuitName": "Albert Park Grand Prix Circuit",
+    "url": "http://en.wikipedia.org/wiki/Melbourne_Grand_Prix_Circuit",
+  },
+]
+`;

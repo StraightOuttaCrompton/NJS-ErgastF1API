@@ -20,6 +20,10 @@ describe("GET /circuits smoke tests", () => {
             year: 2022,
         },
         {
+            year: 2010,
+            round: 2,
+        },
+        {
             driverId: "maldonado",
             status: 4,
         },
