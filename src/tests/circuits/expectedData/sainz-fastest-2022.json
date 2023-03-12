@@ -1,0 +1,14 @@
+[
+    {
+        "circuitId": "ricard",
+        "url": "http://en.wikipedia.org/wiki/Paul_Ricard_Circuit",
+        "circuitName": "Circuit Paul Ricard",
+        "Location": { "lat": "43.2506", "long": "5.79167", "locality": "Le Castellet", "country": "France" }
+    },
+    {
+        "circuitId": "villeneuve",
+        "url": "http://en.wikipedia.org/wiki/Circuit_Gilles_Villeneuve",
+        "circuitName": "Circuit Gilles Villeneuve",
+        "Location": { "lat": "45.5", "long": "-73.5228", "locality": "Montreal", "country": "Canada" }
+    }
+]

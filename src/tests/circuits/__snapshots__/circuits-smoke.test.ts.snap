@@ -1217,3 +1217,32 @@ exports[`GET /circuits smoke tests /circuits?driverId=max_verstappen&grid=1&year
   },
 ]
 `;
+
+exports[`GET /circuits smoke tests /circuits?driverId=sainz&fastest=1&year=2022 1`] = `
+[
+  {
+    "Location": {
+      "alt": "432",
+      "country": "France",
+      "lat": "43.2506",
+      "locality": "Le Castellet",
+      "long": "5.79167",
+    },
+    "circuitId": "ricard",
+    "circuitName": "Circuit Paul Ricard",
+    "url": "http://en.wikipedia.org/wiki/Paul_Ricard_Circuit",
+  },
+  {
+    "Location": {
+      "alt": "13",
+      "country": "Canada",
+      "lat": "45.5",
+      "locality": "Montreal",
+      "long": "-73.5228",
+    },
+    "circuitId": "villeneuve",
+    "circuitName": "Circuit Gilles Villeneuve",
+    "url": "http://en.wikipedia.org/wiki/Circuit_Gilles_Villeneuve",
+  },
+]
+`;

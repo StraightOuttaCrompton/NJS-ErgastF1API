@@ -115,7 +115,7 @@ function parseParams(req: Request, res: Response) {
         driverId,
         grid,
         result,
-        fastest,
+        fastest, // rank of the fastest lap in a race
         status,
         driverStandings,
         constructorStandings,
@@ -197,7 +197,7 @@ export async function getCircuits(req: Request, res: Response) {
                             statusId: status ? { in: [status] } : undefined,
                             positionText: result?.toString() ? { in: [result.toString()] } : undefined,
                             grid: grid ? { in: [grid] } : undefined,
-                            // rank: fastest ? { in: [fastest] } : undefined,
+                            rank: fastest ? { in: [fastest] } : undefined,
                         },
                     },
 

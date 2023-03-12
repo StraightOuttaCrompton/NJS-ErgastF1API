@@ -32,6 +32,11 @@ describe("GET /circuits smoke tests", () => {
             grid: 1,
             year: 2022,
         },
+        {
+            driverId: "sainz",
+            fastest: 1,
+            year: 2022,
+        },
     ];
 
     afterAll(async () => {
