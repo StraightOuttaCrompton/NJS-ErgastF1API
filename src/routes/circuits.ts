@@ -220,14 +220,10 @@ export async function getCircuits(req: Request, res: Response) {
                                 : undefined,
                         },
                     },
-
                     // constructorResults: {
                     //     some: {
-                    //         // TODO: why do I need this ignore?
-                    //         // @ts-ignore
-                    //         constructor: {
-                    //             // TODO: allow multiple
-                    //             constructorRef: constructor,
+                    //         constructorRelation: {
+                    //             constructorRef: constructorId,
                     //         },
                     //     },
                     // },

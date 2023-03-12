@@ -96,7 +96,7 @@ model constructorResults {
   race   races @relation(fields: [raceId], references: [raceId])
 
   constructorId Int          @default(0)
-  constructor   constructors @relation(fields: [constructorId], references: [constructorId])
+  constructorRelation   constructors @relation(fields: [constructorId], references: [constructorId])
 
   points Float?  @db.Float
   status String? @db.VarChar(255)
