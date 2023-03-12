@@ -192,7 +192,20 @@ export async function getCircuits(req: Request, res: Response) {
                     results: {
                         some: {
                             driver: {
-                                driverRef: driverId,
+                                driverRef: driverId
+                                    ? {
+                                          // TODO: allow for multiple
+                                          in: [driverId],
+                                      }
+                                    : undefined,
+                            },
+                            constructorRelation: {
+                                constructorRef: constructorId
+                                    ? {
+                                          // TODO: allow for multiple
+                                          in: [constructorId],
+                                      }
+                                    : undefined,
                             },
                             statusId: status
                                 ? {
@@ -220,13 +233,6 @@ export async function getCircuits(req: Request, res: Response) {
                                 : undefined,
                         },
                     },
-                    // constructorResults: {
-                    //     some: {
-                    //         constructorRelation: {
-                    //             constructorRef: constructorId,
-                    //         },
-                    //     },
-                    // },
                 },
             },
         },

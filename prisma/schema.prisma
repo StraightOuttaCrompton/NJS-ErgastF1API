@@ -69,7 +69,7 @@ model results {
   driver   drivers @relation(fields: [driverId], references: [driverId])
 
   constructorId Int          @default(0)
-  constructor   constructors @relation(fields: [constructorId], references: [constructorId])
+  constructorRelation   constructors @relation(fields: [constructorId], references: [constructorId])
 
   number          Int?
   grid            Int     @default(0)

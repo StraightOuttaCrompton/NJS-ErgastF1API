@@ -4,7 +4,6 @@ import querystring from "querystring";
 import { pool } from "../../connection";
 import { CircuitsQueryParameters } from "routes/circuits";
 
-// import alonsoMclaren from "./expectedData/alonso-mclaren.json";
 // import vettelWinsFerrari from "./expectedData/vettel-wins-ferrari.json";
 
 describe("GET /circuits smoke tests", () => {
@@ -13,6 +12,10 @@ describe("GET /circuits smoke tests", () => {
     const queries: Partial<CircuitsQueryParameters>[] = [
         {
             driverId: "bottas",
+        },
+        {
+            driverId: "alonso",
+            constructorId: "minardi",
         },
         {
             driverId: "hamilton",
@@ -57,21 +60,10 @@ describe("GET /circuits smoke tests", () => {
         testCase(`${endpoint}?${querystring.stringify(query)}`);
     });
 
-    // test("alonso-mclaren", async () => {
-    //     const url = `${endpoint}?${querystring.stringify({
-    //         driver: "alonso",
-    //         constructor: "mclaren",
-    //     })}`;
-
-    //     const response = await request(app).get(url);
-
-    //     expect(response.body).toEqual(alonsoMclaren);
-    // });
-
     // test("vettel-wins-ferrari", async () => {
     //     const url = `${endpoint}?${querystring.stringify({
-    //         driver: "vettel",
-    //         constructor: "ferrari",
+    //         driverId: "vettel",
+    //         constructorId: "ferrari",
     //         result: 1,
     //     })}`;
 
