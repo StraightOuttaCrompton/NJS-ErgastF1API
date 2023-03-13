@@ -1,5 +1,6 @@
 version: "3.7"
 services:
+    # TODO: use for production builds
     # api-server:
     #   build:
     #     dockerfile: apiServer.Dockerfile
@@ -23,14 +24,3 @@ services:
             MYSQL_DATABASE: ergastdb
         ports:
             - "3306:3306"
-
-    # phpmyadmin:
-    #   image: phpmyadmin/phpmyadmin:5.0.4
-    #   container_name: phpmyadmin
-    #   restart: always
-    #   environment:
-    #     PMA_HOST: mysql-server
-    #     PMA_USER: root
-    #     PMA_PASSWORD: f1
-    #   ports:
-    #     - "5000:80"
